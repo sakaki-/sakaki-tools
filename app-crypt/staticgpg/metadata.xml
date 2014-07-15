@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <herd>crypto</herd>
+  <longdescription>
+    GnuPG is a complete and free replacement for PGP. Because it does
+    not use the patented IDEA algorithm, it can be used without any
+    restrictions. GnuPG is a RFC2440 (OpenPGP) compliant application.
+    This variant is compiled statically, and is only intended for use
+    within an initramfs. It does not rely on the pinenetry helper.
+  </longdescription>
+</pkgmetadata>

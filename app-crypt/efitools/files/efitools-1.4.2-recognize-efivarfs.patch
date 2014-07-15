@@ -1,0 +1,18 @@
+diff --git a/lib/kernel_efivars.c b/lib/kernel_efivars.c
+index 3c5852c..07af225 100644
+--- a/lib/kernel_efivars.c
++++ b/lib/kernel_efivars.c
+@@ -66,10 +66,10 @@ kernel_variable_init(void)
+ 	while (ptr < buf + st.st_size) {
+ 		int count;
+ 
+-		sscanf(ptr, "%*s on %s type %s %*s\n%n", path, type, &count);
++		sscanf(ptr, "%*s on %s type %s %*[^\n]\n%n", path, type, &count);
+ 		ptr += count;
+-		if (strcmp(type, "efivarfs") != 0)
+-			continue;
++		if (strcmp(type, "efivarfs") == 0)
++			break;
+ 	}
+ 	if (strcmp(type, "efivarfs") != 0) {
+ 		fprintf(stderr, "No efivarfs filesystem is mounted\n");

@@ -1,0 +1,7 @@
+# ChangeLog for app-crypt/staticgpg
+# Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
+# $Header: $
+
+  15 Jul 2014; sakaki <sakaki@deciban.com> ChangeLog:
+  Initial public release.
+

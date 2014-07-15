@@ -1,0 +1,31 @@
+.TH staticgpg 1 "Version 0.1 (GnuPG 1.4.16)" "GnuPG (static)" "GNU Privacy Guard (Statically Linked)"
+.SH NAME
+.B staticgpg
+\- OpenPGP tool (static, no-pinentry version)
+.SH SYNOPSIS
+.B staticgpg
+.RB [ \-\-homedir
+.IR dir ]
+.RB [ \-\-options
+.IR file ]
+.RI [ options ]
+.I command
+.RI [ args ]
+
+.SH DESCRIPTION
+\fBstaticgpg\fR is a statically linked version of the GNU Privacy Guard (GnuPG)
+program, \fBgpg\fR(1) which does not require the use of the pinentry helper.
+
+Please refer to the \fBgpg\fR(1) manpage for further details on invocation etc.
+
+\fBstaticgpg\fR is primarily intended for use inside an
+initramfs; for example
+to unlock a GPG-encrypted keyfile protecting a LUKS partition.
+It is not intended for use directly from the command line.
+
+Within Gentoo, this package may be safely be installed together with the
+standard \fBapp-crypt/gnupg\fR package. The underlying \fBgpg\fR(1) version is
+1.4.16 (which does not rely on \fBpinentry\fR).
+
+.SH "SEE ALSO"
+.BR gpg (1).

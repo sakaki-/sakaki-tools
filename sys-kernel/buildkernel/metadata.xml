@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer status="active">
+		<email>sakaki@deciban.com</email>
+		<name>sakaki</name>
+</maintainer>
+<upstream>
+		<maintainer status="active">
+				<email>sakaki@deciban.com</email>
+				<name>sakaki</name>
+		</maintainer>
+		<bugs-to>mailto:sakaki@deciban.com</bugs-to>
+</upstream>
+<longdescription>
+		This is a script that builds a Gentoo Linux EFI stub kernel which is
+		suitable for booting from a USB key using UEFI (no additional
+		bootloader required). It makes use of the initramfs creation tools
+		(and early userspace init) provided by sys-kernel/genkernel-next.
+
+		LVM-over-(dual-factor)LUKS, secure boot and plymouth are supported.
+</longdescription>
+<use>
+		<flag name='plymouth'> Enables support for <pkg>sys-boot/plymouth</pkg>
+		in the initramfs (but does not mandate its use).</flag>
+</use>
+</pkgmetadata>

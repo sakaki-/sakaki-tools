@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer status="active">
+		<email>sakaki@deciban.com</email>
+		<name>sakaki</name>
+</maintainer>
+<upstream>
+		<maintainer status="active">
+				<email>sakaki@deciban.com</email>
+				<name>sakaki</name>
+		</maintainer>
+		<bugs-to>mailto:sakaki@deciban.com</bugs-to>
+</upstream>
+<longdescription>
+		This is a very simple utility script, which allows you to monitor the
+		progress of a parallel emerge. When invoked, it shows a split-screen
+		display, which updates once a second. The top part shows the tail of
+		the current Portage download log, and the lower part shows the tail
+		of the most recent Portage build log.
+</longdescription>
+</pkgmetadata>

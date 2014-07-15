@@ -1,0 +1,2 @@
+# Per https://wiki.gentoo.org/wiki/Overlay#eix_integration
+OVERLAY_CACHE_METHOD="assign"
