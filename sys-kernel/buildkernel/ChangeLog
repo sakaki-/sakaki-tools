@@ -2,6 +2,11 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*buildkernel-1.0.1 (21 Jul 2014)
+
+  21 Jul 2014; sakaki <sakaki@deciban.com> +buildkernel-1.0.1.ebuild:
+  USB detection no longer relies on udevadm (in ebuild or underlying)
+
   15 Jul 2014; sakaki <sakaki@deciban.com> ChangeLog:
   Initial public release.
 
