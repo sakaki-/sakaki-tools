@@ -2,6 +2,12 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*genup-1.0.1 (25 Jul 2014)
+
+  25 Jul 2014; sakaki <sakaki@deciban.com> +genup-1.0.1.ebuild:
+  Bug fix in underlying (missing handler for -c/--dispatch-conf
+  command line option).
+
   15 Jul 2014; sakaki <sakaki@deciban.com> ChangeLog:
   Initial public release.
 
