@@ -2,6 +2,12 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*buildkernel-1.0.2 (25 Jul 2014)
+
+  25 Jul 2014; sakaki <sakaki@deciban.com> +buildkernel-1.0.2.ebuild:
+  Bug fix in underlying (overaggressive check for presence of LUKS
+  keyfile)
+
 *buildkernel-1.0.1 (21 Jul 2014)
 
   21 Jul 2014; sakaki <sakaki@deciban.com> +buildkernel-1.0.1.ebuild:
