@@ -2,6 +2,11 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*genup-1.0.2 (27 Jul 2014)
+
+  27 Jul 2014; sakaki <sakaki@deciban.com> +genup-1.0.2.ebuild:
+  Bug fix in underlying (dealing with execution from crontab).
+
 *genup-1.0.1 (25 Jul 2014)
 
   25 Jul 2014; sakaki <sakaki@deciban.com> +genup-1.0.1.ebuild:
