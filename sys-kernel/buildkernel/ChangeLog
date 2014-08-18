@@ -2,6 +2,11 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*buildkernel-1.0.4 (18 Aug 2014)
+
+  18 Aug 2014; sakaki <sakaki@deciban.com> +buildkernel-1.0.4.ebuild:
+  Bug fix in underlying (parsing output of "efibootmgr -v").
+
 *buildkernel-1.0.3 (27 Jul 2014)
 
   27 Jul 2014; sakaki <sakaki@deciban.com> +buildkernel-1.0.3.ebuild:
