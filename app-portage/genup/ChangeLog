@@ -2,6 +2,12 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*genup-1.0.4 (04 Sep 2014)
+
+  04 Sep 2014; sakaki <sakaki@deciban.com> +genup-1.0.4.ebuild:
+  Various changes in underlying (to improve logic and robustness of
+  emerge process).
+
 *genup-1.0.3 (18 Aug 2014)
 
   18 Aug 2014; sakaki <sakaki@deciban.com> +genup-1.0.3.ebuild:
