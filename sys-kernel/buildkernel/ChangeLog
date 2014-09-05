@@ -2,6 +2,11 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*buildkernel-1.0.5-r1 (05 Sep 2014)
+
+  05 Sep 2014; sakaki <sakaki@deciban.com> +buildkernel-1.0.5-r1.ebuild:
+  Fixed typo in elog message.
+
 *buildkernel-1.0.5 (04 Sep 2014)
 
   04 Sep 2014; sakaki <sakaki@deciban.com> +buildkernel-1.0.5.ebuild:
