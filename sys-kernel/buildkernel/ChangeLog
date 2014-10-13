@@ -2,6 +2,11 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*buildkernel-1.0.6 (13 Oct 2014)
+
+  13 Oct 2014; sakaki <sakaki@deciban.com> +buildkernel-1.0.6.ebuild:
+  Fix colour bug; remove --noreplace for @module-rebuild.
+
 *buildkernel-1.0.5-r1 (05 Sep 2014)
 
   05 Sep 2014; sakaki <sakaki@deciban.com> +buildkernel-1.0.5-r1.ebuild:
