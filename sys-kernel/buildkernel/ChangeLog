@@ -2,6 +2,13 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*buildkernel-1.0.7 (19 Oct 2014)
+
+  19 Oct 2014; sakaki <sakaki@deciban.com> +buildkernel-1.0.7.ebuild:
+  Added --rebuild-external-modules option, other minor fixes.
+  Now just warns, rather than dies, if emerge @module-rebuild fails.
+  Fixed handling of additional kernel command line options.
+
 *buildkernel-1.0.6 (13 Oct 2014)
 
   13 Oct 2014; sakaki <sakaki@deciban.com> +buildkernel-1.0.6.ebuild:
