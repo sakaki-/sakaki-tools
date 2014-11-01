@@ -2,6 +2,14 @@
 # Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*buildkernel-1.0.8 (01 Nov 2014)
+
+  01 Nov 2014; sakaki <sakaki@deciban.com> +buildkernel-1.0.8.ebuild:
+  Added the ability to explicitly specify CRYPTPATHMAP in
+  /etc/buildkernel.conf. This is useful for those users whose LUKS
+  filesystem is on a non-GPT partition (for example, where an MBR
+  partition, or even top-level drive, was used as the luksFormat target).
+
 *buildkernel-1.0.7 (19 Oct 2014)
 
   19 Oct 2014; sakaki <sakaki@deciban.com> +buildkernel-1.0.7.ebuild:
