@@ -2,7 +2,7 @@
 
 Overlay containing various utility ebuilds for Gentoo on EFI.
 
-Required for the [**EFI Gentoo End to End Install**](https://wiki.gentoo.org/wiki/EFI_Gentoo_End_to_End_Install) tutorial on the Gentoo wiki.
+Required for the [**EFI Gentoo End to End Install**](https://wiki.gentoo.org/wiki/Sakaki's_EFI_Install_Guide) tutorial on the Gentoo wiki.
 
 ## List of ebuilds
 
@@ -20,7 +20,7 @@ Required for the [**EFI Gentoo End to End Install**](https://wiki.gentoo.org/wik
 ## Installation
 
 **sakaki-tools** is best installed (on Gentoo) via **layman**(8).
-Full instructions are provided on the [Gentoo wiki](https://wiki.gentoo.org/wiki/EFI_Gentoo_End_to_End_Install/Building_the_Gentoo_Base_System_Minus_Kernel#Preparing_to_Run_Parallel_emerges).
+Full instructions are provided on the [Gentoo wiki](https://wiki.gentoo.org/wiki/Sakaki's_EFI_Install_Guide/Building_the_Gentoo_Base_System_Minus_Kernel#Preparing_to_Run_Parallel_emerges).
 
 The following are short form instructions. If you haven't already installed **layman**(8), do so first:
 
