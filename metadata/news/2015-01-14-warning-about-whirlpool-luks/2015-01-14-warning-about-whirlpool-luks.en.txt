@@ -1,0 +1,67 @@
+Title: Warning about Whirlpool hash in LUKS
+Author: sakaki <sakaki@deciban.com>
+Content-Type: text/plain
+Posted: 2015-01-14
+Revision: 1
+News-Item-Format: 1.0
+
+Per this report: https://bugs.archlinux.org/task/38550, the currently
+stable version of dev-libs/libgcrypt (1.5.4-r1) does not correctly
+implement the Whirlpool hash in certain situations - unfortunately
+including its use by LUKS.
+
+This upshot of this is that if you have formatted your LUKS container
+using the Whirlpool hash (whilst booted from the default Gentoo minimal
+install CD), you will not be able to open it again, if you subsequently
+upgrade libgcrypt to a version in which the correct Whirlpool handling
+is used (e.g. 1.6.1-r2).
+
+To avoid issues with an automatic upgrade of libgcrypt locking you out of
+your LUKS container (e.g., when the 1.6 versions are stabilized), you should
+determine NOW if this affects you, and if so perform the remedial steps
+below.
+
+How to check if the problem affects you:
+As root, run (substitute your LUKS path, e.g. /dev/sda5, for /dev/sdZn):
+  cryptsetup luksDump --debug /dev/sdZn | grep -i whirlpool
+
+If this reports something similar to:
+  # Crypto backend (gcrypt 1.5.4, flawed whirlpool) initialized.
+  Hash spec:      whirlpool
+
+then you need to take action. Note first that:
+1) if you have not yet formatted your LUKS partition, then this problem
+   does NOT affect you; as the instructions on the wiki now reflect
+   the use of a different hash; as such, you can continue with the
+   install, and safely ignore the rest of this news item;
+2) if you are at an early stage in the install, then the simplest course
+   would probably be to return to the page
+   "Preparing the LUKS-LVM Filesystem and Boot USB Key", and proceed
+   again from there (using the updated instructions; these now stipulate
+   the use of a SHA-512 hash, which is correctly implemented in version
+   both 1.5 and 1.6 of libgcrypt).
+
+However, if you already have significant data on your LUKS partition,
+read on:
+
+First, mask libgcrypt so that it does not update and lock you out
+by accident. Issue (as root):
+  echo '>=dev-libs/libgcrypt-1.6' >> /etc/portage/package.mask
+
+Then, backup any vital data or software on your LUKS partition!
+
+After that, please follow the instructions on the following Gentoo
+Wiki page, to migrate your LUKS header hash:
+
+https://wiki.gentoo.org/wiki/Sakaki%27s_EFI_Install_Guide/
+Migrating_from_Whirlpool_Hash_on_LUKS
+
+The instructions will work even if you have already upgraded
+dev-libs/libgcrypt to >= version 1.6, and thereby locked yourself out.
+
+Any questions, feel free to email me!
+
+Apologies for the inconvenience caused by this bug (and thanks
+to Dr-peppa for bringing it to my attention).
+
+sakaki <sakaki@deciban.com>
