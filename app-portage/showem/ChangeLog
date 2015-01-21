@@ -1,6 +1,11 @@
 # ChangeLog for app-portage/showem
-# Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2015 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+*showem-1.0.1 (21 Jan 2015)
+
+  21 Jan 2015; sakaki <sakaki@deciban.com> +showem-1.0.1.ebuild:
+  Add ability to specify refresh delay; migrate to explicit tarball
 
   15 Jul 2014; sakaki <sakaki@deciban.com> ChangeLog:
   Initial public release.
