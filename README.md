@@ -2,7 +2,7 @@
 
 Overlay containing various utility ebuilds for Gentoo on EFI.
 
-Required for the [**EFI Gentoo End to End Install**](https://wiki.gentoo.org/wiki/Sakaki's_EFI_Install_Guide) tutorial on the Gentoo wiki.
+Required for the tutorial ["**Sakaki's EFI Install Guide**"](https://wiki.gentoo.org/wiki/Sakaki's_EFI_Install_Guide) on the Gentoo wiki.
 
 ## List of ebuilds
 
