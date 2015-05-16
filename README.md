@@ -19,49 +19,42 @@ Required for the tutorial ["**Sakaki's EFI Install Guide**"](https://wiki.gentoo
 
 ## Installation
 
-**sakaki-tools** is best installed (on Gentoo) via **layman**(8).
+As of version >= 2.2.16 of Portage, **sakaki-tools** is best installed (on Gentoo) via the [new plug-in sync system](https://wiki.gentoo.org/wiki/Project:Portage/Sync).
 Full instructions are provided on the [Gentoo wiki](https://wiki.gentoo.org/wiki/Sakaki's_EFI_Install_Guide/Building_the_Gentoo_Base_System_Minus_Kernel#Preparing_to_Run_Parallel_emerges).
 
-The following are short form instructions. If you haven't already installed **layman**(8), do so first:
+The following are short form instructions. If you haven't already installed **git**(1), do so first:
 
-    emerge --ask --verbose app-portage/layman
-    echo 'source "/var/lib/layman/make.conf"' >> /etc/portage/make.conf
+    # emerge --ask --verbose dev-vcs/git 
 
-Make sure the `git` USE flag is set for the **app-portage/layman** package (it should be by default).
+Next, create a custom `/etc/portage/repos.conf` entry for the **sakaki-tools** overlay, so Portage knows what to do. Make sure that `/etc/portage/repos.conf` exists, and is a directory. Then, fire up your favourite editor:
 
-Next, create a custom layman entry for the **sakaki-tools** overlay, so **layman**(8) can find it on GitHub. Fire up your favourite editor:
-
-    nano -w /etc/layman/overlays/sakaki-tools.xml
+    # nano -w /etc/portage/repos.conf/sakaki-tools.conf
 
 and put the following text in the file:
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE repositories SYSTEM "/dtd/repositories.dtd">
-    <repositories xmlns="" version="1.0">
-        <repo priority="50" quality="experimental" status="unofficial">
-    	    <name>sakaki-tools</name>
-    	    <description>Various utility ebuilds for Gentoo on EFI, from sakaki.</description>
-    	    <homepage>https://github.com/sakaki-/sakaki-tools</homepage>
-    	    <owner>
-    		    <email>sakaki@deciban.com</email>
-    		    <name>sakaki</name>
-            </owner>
-    	    <source type="git">https://github.com/sakaki-/sakaki-tools.git</source>
-        </repo>
-    </repositories>
+```
+[sakaki-tools]
+ 
+# Various utility ebuilds for Gentoo on EFI
+# Maintainer: sakaki (sakaki@deciban.com)
+ 
+location = /usr/local/portage/sakaki-tools
+sync-type = git
+sync-uri = https://github.com/sakaki-/sakaki-tools.git
+priority = 50
+auto-sync = yes
+```
 
 Then run:
 
-    layman --sync-all
-    layman --add="sakaki-tools"
+    # emaint sync --repo sakaki-tools
 
-If you are running on the stable branch by default, allow **~amd64** keyword files from this repository:
+If you are running on the stable branch by default, allow **~amd64** keyword files from this repository. Make sure that `/etc/portage/package.accept_keywords` exists, and is a directory. Then issue:
 
-    echo '*/*::sakaki-tools ~amd64' >> /etc/portage/package.accept_keywords
+    # echo "*/*::sakaki-tools ~amd64" >> /etc/portage/package.accept_keywords/sakaki-tools-repo
     
 Now you can install packages from the overlay. For example:
 
-    emerge --ask --verbose app-portage/genup
+    # emerge --ask --verbose app-portage/genup
 
 ## Maintainers
 
