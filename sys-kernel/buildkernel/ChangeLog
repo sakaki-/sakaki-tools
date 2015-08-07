@@ -2,6 +2,17 @@
 # Copyright 1999-2015 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*buildkernel-1.0.11 (07 Aug 2015)
+
+  07 Aug 2015; sakaki <sakaki@deciban.com> -buildkernel-1.0.0.ebuild,
+  -buildkernel-1.0.1.ebuild, -buildkernel-1.0.2.ebuild,
+  -buildkernel-1.0.3.ebuild, -buildkernel-1.0.4.ebuild,
+  -buildkernel-1.0.5.ebuild, -buildkernel-1.0.5-r1.ebuild,
+  -buildkernel-1.0.6.ebuild, -buildkernel-1.0.7.ebuild,
+  -buildkernel-1.0.8.ebuild, -buildkernel-1.0.9.ebuild,
+  +buildkernel-1.0.11.ebuild:
+  Add support for deblobbing, OpenRC. Drop old.
+
 *buildkernel-1.0.10 (19 Jan 2015)
 
   19 Jan 2015; sakaki <sakaki@deciban.com> +buildkernel-1.0.10.ebuild:
