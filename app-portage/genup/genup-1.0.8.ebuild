@@ -1,4 +1,4 @@
-# Copyright 1999-2014 Gentoo Foundation
+# Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -9,7 +9,7 @@ inherit eutils
 DESCRIPTION="Update Portage tree, all installed packages, and kernel"
 BASE_SERVER_URI="https://github.com/sakaki-"
 HOMEPAGE="${BASE_SERVER_URI}/${PN}"
-SRC_URI="${BASE_SERVER_URI}/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="${BASE_SERVER_URI}/${PN}/releases/download/${PV}/${P}.tar.gz"
 
 LICENSE="GPL-3+"
 SLOT="0"
@@ -24,7 +24,7 @@ RDEPEND="${DEPEND}
 	>=app-admin/perl-cleaner-2.7
 	>=app-admin/python-updater-0.11
 	>=app-portage/gentoolkit-0.3.0.8-r2
-	>=sys-kernel/buildkernel-1.0.3
+	>=sys-kernel/buildkernel-1.0.12
 	>=app-shells/bash-4.2"
 
 # ebuild function overrides

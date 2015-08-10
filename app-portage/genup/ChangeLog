@@ -1,6 +1,15 @@
 # ChangeLog for app-portage/genup
-# Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2015 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+*genup-1.0.8 (10 Aug 2015)
+
+  10 Aug 2015; sakaki <sakaki@deciban.com> -genup-1.0.0.ebuild,
+  -genup-1.0.1.ebuild, -genup-1.0.2.ebuild, -genup-1.0.3.ebuild,
+  -genup-1.0.4.ebuild, -genup-1.0.5.ebuild, -genup-1.0.6.ebuild,
+  -genup-1.0.7.ebuild, +genup-1.0.8.ebuild:
+  Add --alert option, better handling where user updates to portage
+  config files required in @world emerge step.
 
 *genup-1.0.7 (04 Nov 2014)
 
