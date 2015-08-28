@@ -1,6 +1,7 @@
-# Copyright 1999-2014 Gentoo Foundation
-# Distributed under the terms of the GNU General Public License v2
-# $Header: $
+# ebuild for showem (a simple emerge progress viewer)
+# Copyright (c) 2015 sakaki <sakaki@deciban.com>
+# License: GPL v2
+# NO WARRANTY
 
 EAPI=5
 
@@ -9,11 +10,11 @@ inherit eutils
 DESCRIPTION="View output of a parallel emerge from a separate terminal"
 BASE_SERVER_URI="https://github.com/sakaki-"
 HOMEPAGE="${BASE_SERVER_URI}/${PN}"
-SRC_URI="${BASE_SERVER_URI}/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="${BASE_SERVER_URI}/${PN}/releases/download/${PV}/${P}.tar.gz"
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64 ~x86 ~arm ~ppc"
 
 RESTRICT="mirror"
 

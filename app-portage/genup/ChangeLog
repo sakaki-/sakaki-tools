@@ -2,6 +2,13 @@
 # Copyright 1999-2015 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*genup-1.0.9 (28 Aug 2015)
+
+  28 Aug 2015; sakaki <sakaki@deciban.com> +genup-1.0.9.ebuild, metadata.xml:
+  Add buildkernel USE flag; support for pump/distcc.
+
+  The USE flag controls dependency on sys-kernel/buildkernel.
+
 *genup-1.0.8 (10 Aug 2015)
 
   10 Aug 2015; sakaki <sakaki@deciban.com> -genup-1.0.0.ebuild,
