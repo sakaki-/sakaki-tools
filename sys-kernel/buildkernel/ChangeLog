@@ -2,6 +2,12 @@
 # Copyright 1999-2015 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+*buildkernel-1.0.13 (12 Nov 2015)
+
+  12 Nov 2015; sakaki <sakaki@deciban.com> -buildkernel-1.0.12.ebuild,
+  +buildkernel-1.0.13.ebuild:
+  Fix check_gcc_config_and_reset_if_necessary fn
+
 *buildkernel-1.0.12 (10 Aug 2015)
 
   10 Aug 2015; sakaki <sakaki@deciban.com> -buildkernel-1.0.10.ebuild,
