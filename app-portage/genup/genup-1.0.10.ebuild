@@ -25,7 +25,7 @@ RDEPEND="${DEPEND}
 	>=app-admin/perl-cleaner-2.7
 	>=app-admin/python-updater-0.11
 	>=app-portage/gentoolkit-0.3.0.8-r2
-	amd64? ( buildkernel? ( >=sys-kernel/buildkernel-1.0.12 ) )
+	amd64? ( buildkernel? ( >=sys-kernel/buildkernel-1.0.13 ) )
 	>=app-shells/bash-4.2"
 
 # ebuild function overrides
