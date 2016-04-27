@@ -1,6 +1,11 @@
 # ChangeLog for app-crypt/efitools
-# Copyright 1999-2014 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2016 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+*efitools-1.4.3 (27 Apr 2016)
+
+  27 Apr 2016; sakaki <sakaki@gentoo.org> +efitools-1.4.3.ebuild:
+  Direct git build for 1.4.3. No version bumps in Gentoo tree for a while.
 
   15 Jul 2014; sakaki <sakaki@deciban.com> ChangeLog:
   Initial public release.
