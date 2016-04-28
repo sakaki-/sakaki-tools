@@ -2,6 +2,9 @@
 # Copyright 1999-2016 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  28 Apr 2016; sakaki <sakaki@gentoo.org> efitools-1.4.3.ebuild:
+  Migrate git URL to https; some firewalls have trouble with port 9418.
+
 *efitools-1.4.3 (27 Apr 2016)
 
   27 Apr 2016; sakaki <sakaki@gentoo.org> +efitools-1.4.3.ebuild:

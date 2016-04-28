@@ -6,7 +6,7 @@ EAPI="5"
 inherit git-r3
 DESCRIPTION="Tools for manipulating UEFI secure boot platforms"
 HOMEPAGE="git://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git"
-EGIT_REPO_URI="git://git.kernel.org/pub/scm/linux/kernel/git/jejb/${PN}.git"
+EGIT_REPO_URI="https://git.kernel.org/pub/scm/linux/kernel/git/jejb/${PN}.git"
 EGIT_COMMIT="v${PV}"
 
 LICENSE="GPL-2"
