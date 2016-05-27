@@ -1,0 +1,3 @@
+This directory contains some simple example custom updater scripts for use with
+genup. Copy or symlink any you wish to use into the parent directory,
+/etc/genup/updaters.d, modifying as necessary.

@@ -1,6 +1,15 @@
 # ChangeLog for app-portage/genup
-# Copyright 1999-2015 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2016 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+*genup-1.0.11 (27 May 2016)
+
+  27 May 2016; sakaki <sakaki@gentoo.org> +genup-1.0.11.ebuild,
+  +files/updaters.d/20-python2-version.sh,
+  +files/updaters.d/21-python3-version.sh,
+  +files/updaters.d/22-haskell-updater.sh, +files/updaters.d/README,
+  +files/updaters-README:
+  Add support for custom updaters (/etc/genup/updaters.d)
 
 *genup-1.0.10 (12 Nov 2015)
 

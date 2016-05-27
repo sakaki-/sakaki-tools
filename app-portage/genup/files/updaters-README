@@ -1,0 +1,8 @@
+Any executable files (or symlinks to executable files) found in this
+directory will be run by genup at the end of its main process (unless
+suppressed by the --no-custom-updaters option).
+
+You can use this if you need to extend genup's functionality. Note that only
+files or links at the top level (not subdirectories) will be processed, and
+that if any such custom updater returns with a non-zero exit status, genup will
+also exit (immediately) with an error.
