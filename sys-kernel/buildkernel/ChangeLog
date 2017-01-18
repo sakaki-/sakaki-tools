@@ -1,6 +1,13 @@
 # ChangeLog for sys-kernel/buildkernel
-# Copyright 1999-2016 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2017 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  17 Jan 2017; sakaki <sakaki@gentoo.org> -buildkernel-1.0.14.ebuild,
+  -buildkernel-1.0.14-r1.ebuild, -buildkernel-1.0.16.ebuild,
+  +buildkernel-1.0.18.ebuild:
+  Add buildkernel-1.0.18, drop old
+
+  Underlying allows the user to set the niceness for invoked makes.
 
 *buildkernel-1.0.17 (26 May 2016)
 
