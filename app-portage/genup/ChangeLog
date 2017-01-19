@@ -1,6 +1,12 @@
 # ChangeLog for app-portage/genup
-# Copyright 1999-2016 Gentoo Foundation; Distributed under the GPL v2
+# Copyright 1999-2017 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
+
+  19 Jan 2017; sakaki <sakaki@gentoo.org> -genup-1.0.10.ebuild,
+  +genup-1.0.12.ebuild:
+  Add options to skip eix-sync, set emerge niceness; use --changed-use
+  rather than --newuse as default world emerge; improve gcc upgrade flow
+  (remembering to call sys-devel/libtool)
 
 *genup-1.0.11-r1 (01 Jun 2016)
 

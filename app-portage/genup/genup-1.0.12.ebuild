@@ -1,4 +1,4 @@
-# Copyright 1999-2015 Gentoo Foundation
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
@@ -13,7 +13,7 @@ SRC_URI="${BASE_SERVER_URI}/${PN}/releases/download/${PV}/${P}.tar.gz"
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~ppc"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc"
 IUSE="+buildkernel"
 
 RESTRICT="mirror"
@@ -54,4 +54,14 @@ src_install() {
 	doins "${FILESDIR}/eix-sync.conf"
 	insinto "/etc/eixrc"
 	doins "${FILESDIR}/01-cache"
+	dodir "/etc/genup/updaters.d/examples"
+	insinto "/etc/genup/updaters.d"
+	newins "${FILESDIR}/updaters-README" README
+	exeinto "/etc/genup/updaters.d/examples"
+	doexe "${FILESDIR}/updaters.d/20-python2-version.sh"
+	doexe "${FILESDIR}/updaters.d/21-python3-version.sh"
+	doexe "${FILESDIR}/updaters.d/22-haskell-updater.sh"
+	doexe "${FILESDIR}/updaters.d/23-eclean-packages.sh"
+	insinto "/etc/genup/updaters.d/examples"
+	doins "${FILESDIR}/updaters.d/README"
 }
