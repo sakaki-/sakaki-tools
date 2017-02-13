@@ -2,6 +2,13 @@
 # Copyright 1999-2017 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  13 Feb 2017; sakaki <sakaki@gentoo.org> +buildkernel-1.0.19.ebuild:
+  Add buildkernel-1.0.19; drop old
+
+  Underlying exposes CREATEEFIBOOT variable, controlling whether
+  buildkernel attempts to modify the EFI boot NVRAM; also ensures
+  CONFIG_VFAT_FS is set in kernel. Thanks to gizahNL for both.
+
   17 Jan 2017; sakaki <sakaki@gentoo.org> -buildkernel-1.0.14.ebuild,
   -buildkernel-1.0.14-r1.ebuild, -buildkernel-1.0.16.ebuild,
   +buildkernel-1.0.18.ebuild:
