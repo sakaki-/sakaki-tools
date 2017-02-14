@@ -2,6 +2,15 @@
 # Copyright 1999-2017 Gentoo Foundation; Distributed under the GPL v2
 # $Header: $
 
+  14 Feb 2017; sakaki <sakaki@gentoo.org> +buildkernel-1.0.20.ebuild:
+  Add buildkernel-1.0.20; drop old.
+
+  Underlying uses kernelrelease instead of kernelversion naming. The two
+  are usually the same, but not so when there is any localversion data.
+  See e.g., notes in
+  https://github.com/sakaki-/sakaki-tools/issues/1#issuecomment-279673861
+  Thanks to tomegathericon for reporting this.
+
   13 Feb 2017; sakaki <sakaki@gentoo.org> +buildkernel-1.0.19.ebuild:
   Add buildkernel-1.0.19; drop old
 
