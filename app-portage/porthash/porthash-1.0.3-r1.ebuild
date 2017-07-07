@@ -19,7 +19,7 @@ RESTRICT="mirror"
 
 DEPEND=""
 RDEPEND="${DEPEND}
-	>=app-crypt/gnupg-2.1.20-r1
+	>=app-crypt/gnupg-2.1.18
 	>=app-shells/bash-4.2"
 
 src_install() {
