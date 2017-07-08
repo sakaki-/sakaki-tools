@@ -1,6 +1,5 @@
-# ebuild for b3-init-scripts (misc init for Excito B3)
-# Copyright (c) 2015 sakaki <sakaki@deciban.com>
-# License: GPL v2
+# Copyright (c) 2017 sakaki <sakaki@deciban.com>
+# License: GPL v3+
 # NO WARRANTY
 
 EAPI=5
