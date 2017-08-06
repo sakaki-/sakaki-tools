@@ -1,0 +1,40 @@
+Title: Removal of sys-boot/plymouth boot splash from Gentoo tree
+Author: sakaki <sakaki@deciban.com>
+Content-Type: text/plain
+Posted: 2017-08-06
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Installed: sys-boot/plymouth
+Display-If-Installed: sys-kernel/buildkernel
+
+Per mgorny@gentoo.org (04 Aug 2017):
+
+"sys-boot/plymouth is unmaintained since Apr 2016. The current version
+ has multiple bugs, including not supporting OpenRC. It really needs
+ an active maintainer. Removal in 30 days. Bug #621470."
+
+and accordingly, sys/boot plymouth (and the plymouth USE flag) have been
+masked, pending deletion.
+
+To work around this in the short term (for use with buildkernel etc.)
+please unmask plymouth and the plymouth USE flag, thus:
+
+  echo "sys-boot/plymouth" > /etc/portage/package.unmask/plymouth
+  mkdir -pv /etc/portage/package.use.mask
+  echo "gnome-base/gdm -plymouth" > /etc/portage/package.use.mask/plymouth
+  echo "sys-kernel/genkernel-next -plymouth" >> /etc/portage/package.use.mask/plymouth
+
+Over the next month (before plymouth is removed) I will look at whether it
+makes sense to take over the genkernel, gdm and plymouth ebuilds into the
+sakaki-tools overlay, and maintain them patched for plymouth use going forward,
+or whether it makes more sense simply to drop the graphical boot splash
+capability. There is also the possibility a maintainer will be found. If you
+feel strongly that plymouth should be retained, please add your comment
+to bug 621470 before the one-month deadline:
+
+  https://bugs.gentoo.org/show_bug.cgi?id=621470
+
+Apologies for the inconvenience caused by this (and thanks to spijet for
+bringing it to my attention).
+
+sakaki <sakaki@deciban.com>
