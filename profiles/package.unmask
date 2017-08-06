@@ -1,5 +1,0 @@
-# masked for removal in main Gentoo tree, but we keep it on life
-# support here for now; watching brief as presumably genkernel-next will
-# drop it soon too...
-sys-boot/plymouth
-
