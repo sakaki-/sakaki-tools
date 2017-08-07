@@ -1,0 +1,40 @@
+Title: Plymouth unmasking ERRATUM
+Author: sakaki <sakaki@deciban.com>
+Content-Type: text/plain
+Posted: 2017-08-07
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Installed: sys-boot/plymouth
+
+This is an erratum for my news item of 2017-08-06, regarding plymouth unmasking.
+
+The initial 2 revisions of that news item (since fixed) instructed you to do
+the following to unmask plymouth:
+
+  echo "sys-boot/plymouth" > /etc/portage/package.unmask/plymouth
+  mkdir -pv /etc/portage/package.use.mask
+  echo "gnome-base/gdm -plymouth" > /etc/portage/package.use.mask/plymouth
+  echo "sys-kernel/genkernel-next -plymouth" >> /etc/portage/package.use.mask/plymouth
+
+That was incorrect, as per the portage(5) documentation package.use.mask is not
+usable in /etc/portage; it needs to go into /etc/portage/profile
+instead. As such, the instructions should have read:
+
+  echo "sys-boot/plymouth" > /etc/portage/package.unmask/plymouth
+  mkdir -pv /etc/portage/profile/package.use.mask
+  echo "gnome-base/gdm -plymouth" > /etc/portage/profile/package.use.mask/plymouth
+  echo "sys-kernel/genkernel-next -plymouth" >> /etc/portage/profile/package.use.mask/plymouth
+
+If you have already followed the previous news item's instructions, and so
+have an /etc/portage/package.use.mask directory, simply do the following to
+put it into the correct location:
+
+  mkdir -pv /etc/portage/profile
+  mv /etc/portage/package.use.mask /etc/portage/profile/
+
+After this, you should be able to emerge buildkernel etc.
+
+Apologies >< for the inconvenience caused by this (and thanks to cmosh for
+bringing it to my attention).
+
+sakaki <sakaki@deciban.com>
