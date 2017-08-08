@@ -2,9 +2,9 @@ Title: Removal of sys-boot/plymouth boot splash from Gentoo tree
 Author: sakaki <sakaki@deciban.com>
 Content-Type: text/plain
 Posted: 2017-08-06
-Revision: 3
+Revision: 4
 News-Item-Format: 2.0
-Display-If-Installed: sys-boot/plymouth
+Display-If-Keyword: amd64
 
 Per mgorny@gentoo.org (04 Aug 2017):
 
