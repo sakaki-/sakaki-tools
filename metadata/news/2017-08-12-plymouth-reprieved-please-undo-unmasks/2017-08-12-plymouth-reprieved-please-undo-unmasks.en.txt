@@ -1,0 +1,24 @@
+Title: Plymouth reprieved, please undo unmasks
+Author: sakaki <sakaki@deciban.com>
+Content-Type: text/plain
+Posted: 2017-08-12
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Keyword: amd64
+
+As you may have seen, sys-boot/plymouth has had a last-minute reprieve:
+
+  https://github.com/gentoo/gentoo/commit/fc982a5
+
+As such, _if_ you have temporarily unmasked it (as directed in my previous news
+items, of 2017-08-06 and 2017-08-07), you should now undo those changes, as
+they are no longer necessary. To do so, issue:
+
+  rm -v /etc/portage/package.unmask/plymouth
+  rm -v /etc/portage/profile/package.use.mask/plymouth
+
+and of course sync your Gentoo tree, using your preferred method.
+
+Best,
+
+sakaki <sakaki@deciban.com>
