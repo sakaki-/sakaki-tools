@@ -1,0 +1,47 @@
+Title: Patching plymouth boot manager (missing major / minor macros)
+Author: sakaki <sakaki@deciban.com>
+Content-Type: text/plain
+Posted: 2017-08-13
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Keyword: amd64
+
+The saga that is sys-boot/plymouth continues ^-^
+
+As of the time of writing, the two in-tree (non-live) versions of plymouth
+(0.9.2-r1 and 0.9.3) do not build correctly on some systems.
+
+This appears to be due to the fact that sys/sysmacros.h has been purged
+from glibc in Gentoo (but not in some other distros)[1].
+
+A bug has been filed (#627690)[2] with a patch, but this has not yet been
+committed. However, you can easily apply this patch now if you like. Simply
+issue (as root):
+
+  mkdir -pv /etc/portage/patches/sys-boot/plymouth-0.9.{2-r1,3-r0}
+  cat > /etc/portage/patches/sys-boot/plymouth-0.9.2-r1/plymouth-sysmacros.patch <<EOF
+--- a/src/libply-splash-core/ply-terminal.c
++++ b/src/libply-splash-core/ply-terminal.c
+@@ -32,6 +32,7 @@
+ #include <sys/socket.h>
+ #include <sys/stat.h>
+ #include <sys/types.h>
++#include <sys/sysmacros.h>
+ #include <termios.h>
+ #include <unistd.h>
+ #include <wchar.h>
+
+EOF
+  cp /etc/portage/patches/sys-boot/plymouth-0.9.{2-r1,3-r0}/plymouth-sysmacros.patch
+
+And you should then be able to emerge plymouth successfully.
+
+The patches have deliberately been placed in revision-specific directories, so
+that if the in-tree ebuilds are bumped they will no longer apply.
+
+Best,
+
+sakaki <sakaki@deciban.com>
+
+[1] https://forums.gentoo.org/viewtopic-p-7906828.html#7906828
+[2] https://bugs.gentoo.org/show_bug.cgi?id=627690
