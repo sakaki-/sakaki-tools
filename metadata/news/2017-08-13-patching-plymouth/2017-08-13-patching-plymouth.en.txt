@@ -1,8 +1,8 @@
-Title: Patching plymouth boot manager (missing major / minor macros)
+Title: Patching plymouth boot manager
 Author: sakaki <sakaki@deciban.com>
 Content-Type: text/plain
 Posted: 2017-08-13
-Revision: 1
+Revision: 2
 News-Item-Format: 2.0
 Display-If-Keyword: amd64
 
