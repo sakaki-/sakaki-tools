@@ -23,7 +23,7 @@ DEPEND=">=sys-apps/gptfdisk-0.8.8
 	>=app-shells/bash-4.2:*"
 RDEPEND="${DEPEND}
 	>=sys-libs/ncurses-5.9-r2
-	|| ( >=sys-kernel/aufs-sources-3.12.20 >=sys-kernel/gentoo-sources-3.12.20 >=sys-kernel/hardened-sources-4.0.8 )
+	>=virtual/linux-sources-3
 	>=app-crypt/sbsigntool-0.6-r1
 	plymouth? ( >=sys-boot/plymouth-0.8.8-r4[gdm,libkms,pango] )
 	>=sys-kernel/genkernel-next-58[cryptsetup,gpg,plymouth?]
