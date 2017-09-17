@@ -1,0 +1,36 @@
+Title: OpenRC now mounts efivarfs ro; impacts efibootmgr, buildkernel
+Author: sakaki <sakaki@deciban.com>
+Content-Type: text/plain
+Posted: 2017-09-17
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Installed: sys-apps/openrc
+Display-If-Keyword: amd64
+
+As of OpenRC 0.28 [1], the efivarfs is mounted (on /sys/firmware/efi/efivars)
+read-only by default (it was previously mounted read-write, and indeed
+systemd still mounts it read-write).
+
+This behaviour prevents tools like efibootmgr (and their clients, such
+as buildkernel) from writing changes to e.g., the EFI boot list, causing an
+error if such operations are attempted (which they will be from time to time,
+during the normal usage workflow of these tools).
+
+To work around this until the various affected software has been patched (to
+temporarily remount rw before sensitive operations need to be performed,
+remounting ro again afterwards), you can append something like the following
+to your /etc/fstab:
+
+efivarfs /sys/firmware/efi/efivars efivarfs rw,nosuid,nodev,noexec,relatime 0 0
+
+On next reboot, OpenRC will respect your explicit settings, allowing tools
+needing efivarfs write access to be used again.
+
+Users of buildkernel on systemd need take no action at this time.
+
+Best,
+
+sakaki <sakaki@deciban.com>
+
+[1] https://archives.gentoo.org/gentoo-dev/message/35304b0db4de9e06fea322275379fa81
+
