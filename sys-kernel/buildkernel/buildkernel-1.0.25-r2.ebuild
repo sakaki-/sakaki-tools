@@ -52,7 +52,9 @@ pkg_preinst() {
 	    # don't overwrite buildkernel.conf, user already has one,
 	    # and we don't want to force an unneeded dispatch-conf
 	    elog "/etc/${PN}.conf already exists, not overwriting."
-	    rm "${D}/etc/${PN}.conf"
+	    # install an identical copy; this is safer than deleting from
+	    # the pre-install image
+	    cp "${ROOT}/etc/${PN}.conf" "${D}/etc/${PN}.conf"
 	else
 	    # attempt to set the LUKS and EFI partition ids automatically
 	    # in the config file (in ${D}) if this can be done unambiguously
