@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+		<email>sakaki@deciban.com</email>
+		<name>sakaki</name>
+</maintainer>
+<longdescription>
+		Selected utilities from the coreboot project. Currently contains
+		ifdtool (to parse and modify flash dumps of Intel firmware) and
+		(for amd64 only) intelmetool (to query the status of the Intel
+		Management Engine).
+</longdescription>
+</pkgmetadata>
