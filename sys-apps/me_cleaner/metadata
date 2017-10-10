@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer type="person">
+		<email>sakaki@deciban.com</email>
+		<name>sakaki</name>
+</maintainer>
+<upstream>
+		<maintainer status="active">
+				<name>Nicola Corna</name>
+		</maintainer>
+		<remote-id type="github">corna/me_cleaner</remote-id>
+</upstream>
+<longdescription>
+		A tool to effectively disable the Intel Management Engine, by
+		modifying its firmware.
+</longdescription>
+</pkgmetadata>
