@@ -18,7 +18,7 @@ Required for the tutorial ["**Sakaki's EFI Install Guide**"](https://wiki.gentoo
   * This package provides various useful tools for manipulating the EFI secure boot variables. It is no longer required as a more modern version has become available in the main Gentoo tree.
 * **app-crypt/staticgpg**
   * A simple ebuild, derived from **app-crypt/gnupg** version 1.4.16, which creates a statically linked, no-pinentry version of **gpg**(1) suitable for use in an initramfs context. It can safely be installed beside a standard 2.x version of **app-crypt/gnupg** (which isn't SLOTted). Deploys its executable to _/usr/bin/staticgpg_. A placeholder manpage is included.
-* **sys-apps/coreboot-utils**
+* **sys-apps/coreboot-utils** [upstream](https://www.coreboot.org)
   * This package provides a few utilities from the coreboot project, specifically `ifdtool` to parse and modify flash dumps of Intel firmware and (on `amd64` only) `intelmetool` to query the status of the Intel Management Engine.
 * **sys-apps/me_cleaner** [upstream](https://github.com/corna/me_cleaner)
   * Provides `me_cleaner-1.0.20171010`; a tool for disabling the Intel Management Engine, by modifying its firmware.
