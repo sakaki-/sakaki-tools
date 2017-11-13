@@ -23,7 +23,6 @@ RDEPEND="${DEPEND}
 	>=sys-libs/ncurses-5.9-r2
 	>=app-portage/eix-0.29.3
 	>=app-admin/perl-cleaner-2.7
-	>=app-admin/python-updater-0.11
 	>=app-portage/gentoolkit-0.3.0.8-r2
 	amd64? ( buildkernel? ( >=sys-kernel/buildkernel-1.0.13 ) )
 	>=app-shells/bash-4.2"
