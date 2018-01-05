@@ -17,7 +17,6 @@ RESTRICT="mirror"
 KEYWORDS="~amd64 ~arm ~arm64"
 
 SRC_URI="${HOMEPAGE}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-KEYWORDS="~amd64 ~x86"
 
 RDEPEND=${PYTHON_DEPS}
 REQUIRED_USE=${PYTHON_REQUIRED_USE}
