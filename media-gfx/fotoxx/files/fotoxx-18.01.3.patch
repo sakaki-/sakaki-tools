@@ -1,0 +1,20 @@
+--- a/Makefile
++++ b/Makefile
+@@ -14,7 +14,7 @@
+ ICONDIR = $(SHAREDIR)/icons
+ IMAGEDIR = $(SHAREDIR)/images
+ LOCALESDIR = $(SHAREDIR)/locales
+-DOCDIR = $(PREFIX)/share/doc/fotoxx
++DOCDIR = $(PREFIX)/share/doc/$(PF)
+ MANDIR = $(PREFIX)/share/man/man1
+ APPDATADIR = $(PREFIX)/share/appdata
+ MENUFILE = $(PREFIX)/share/applications/fotoxx.desktop
+@@ -109,8 +109,6 @@
+ 	gzip -f -9 fotoxx.1
+ 	cp fotoxx.1.gz $(DESTDIR)$(MANDIR)
+ 	rm -f fotoxx.1.gz
+-	# menu (desktop) file
+-	cp -f fotoxx.desktop $(DESTDIR)$(MENUFILE)
+ 	cp -f fotoxx.png $(DESTDIR)$(ICONDIR)
+ 
+ uninstall:
