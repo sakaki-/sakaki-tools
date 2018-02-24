@@ -58,7 +58,7 @@ pkg_postinst() {
 		# we also need a valid swrast dri link to work, but
 		# eselect mesa doesn't manage this properly for
 		# arm64 yet, so...
-		if [[ ! -h "${ROOT%/}/usr/lib64/dri/swrast_dri.so" && -h "${ROOT%/}/usr/lib64/dri/swrast_dri.so" ]]; then
+		if [[ ! -h "${ROOT%/}/usr/lib64/dri/swrast_dri.so" && -h "${ROOT%/}/usr/lib64/dri/swrastg_dri.so" ]]; then
 			ewarn "Manually creating /usr/lib64/dri/swrast_dri.so symlink"
 			cp -Pv "${ROOT%/}/usr/lib64/dri/"swrast{g,}_dri.so
 		fi
