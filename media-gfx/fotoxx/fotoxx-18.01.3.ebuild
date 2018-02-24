@@ -54,6 +54,15 @@ src_install() {
 pkg_postinst() {
 	fdo-mime_mime_database_update
 	fdo-mime_desktop_database_update
+	if use arm64; then
+		# we also need a valid swrast dri link to work, but
+		# eselect mesa doesn't manage this properly for
+		# arm64 yet, so...
+		if [[ ! -h "${ROOT%/}/usr/lib64/dri/swrast_dri.so" && -h "${ROOT%/}/usr/lib64/dri/swrast_dri.so" ]]; then
+			ewarn "Manually creating /usr/lib64/dri/swrast_dri.so symlink"
+			cp -Pv "${ROOT%/}/usr/lib64/dri/"swrast{g,}_dri.so
+		fi
+	fi
 }
 
 pkg_postrm() {
