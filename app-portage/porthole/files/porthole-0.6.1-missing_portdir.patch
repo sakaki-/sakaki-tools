@@ -1,0 +1,16 @@
+Index: porthole/backends/portagelib.py
+===================================================================
+--- porthole/backends/portagelib.py	(revision 1209)
++++ porthole/backends/portagelib.py	(working copy)
+@@ -700,7 +700,10 @@
+         #self.db=self.portdb.auxdbmodule._db_module
+         #print >>stderr, self.db.__dict__.keys()
+         #self.db.dbapi2.check_same_thread  = False
+-        self.portdir = self.settings.environ()['PORTDIR']
++	try:
++		self.portdir = self.settings.environ()['PORTDIR']
++	except KeyError:
++		self.portdir = "/usr/portage"
+         self.config_root = self.settings['PORTAGE_CONFIGROOT']
+         # is PORTDIR_OVERLAY always defined?
+         self.portdir_overlay = get_portage_environ('PORTDIR_OVERLAY')
