@@ -14,6 +14,8 @@ Required for the tutorial ["**Sakaki's EFI Install Guide**"](https://wiki.gentoo
   * Provides the **genup**(8) script, to simplify the process of keeping your Gentoo system up-to-date. **genup**(8) can automatically update the Portage tree, all installed packages, and kernel. Has interactive and non-interactive (batch) modes. A manpage is included.
 * **app-portage/porthash** [source](https://github.com/sakaki-/porthash)
   * Provides the **porthash**(1) script, which creates, or by default verifies, a signed `sha512` "master" hash of the specified Portage repostitory tree (by default, `/usr/portage`). It is intended to provide assurance - when distributing a repo snapshot over an unauthenticated channel such as rsync - that the consitutent ebuilds, manifests etc. have not been tampered with in transit. A manpage is included.
+* **app-portage/porthole**
+  * A simple ebuild, extending porthole-0.6.1-r5, and patching an issue experienced on some systems where `PORTDIR` is undefined.
 * **app-crypt/efitools**
   * This package provides various useful tools for manipulating the EFI secure boot variables. It is no longer required as a more modern version has become available in the main Gentoo tree.
 * **app-crypt/staticgpg**
@@ -22,6 +24,8 @@ Required for the tutorial ["**Sakaki's EFI Install Guide**"](https://wiki.gentoo
   * This package provides a few utilities from the coreboot project, specifically `ifdtool` to parse and modify flash dumps of Intel firmware and (on `amd64` only) `intelmetool` to query the status of the Intel Management Engine.
 * **sys-apps/me_cleaner** [upstream](https://github.com/corna/me_cleaner)
   * Provides `me_cleaner-1.0.20171010`; a tool for disabling the Intel Management Engine, by modifying its firmware.
+* **media-gfx/fotoxx** [upstream](https://www.kornelix.net/fotoxx/fotoxx.html)
+  * Provides `fotoxx-18.01.3`, a program for improving digital photographs (supports HDR etc.).
 
 ## Installation
 
