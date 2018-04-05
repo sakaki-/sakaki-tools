@@ -23,7 +23,7 @@ Required for the tutorial ["**Sakaki's EFI Install Guide**"](https://wiki.gentoo
 * **sys-apps/coreboot-utils** [upstream](https://www.coreboot.org)
   * This package provides a few utilities from the coreboot project, specifically `ifdtool` to parse and modify flash dumps of Intel firmware and (on `amd64` only) `intelmetool` to query the status of the Intel Management Engine.
 * **sys-apps/me_cleaner** [upstream](https://github.com/corna/me_cleaner)
-  * Provides `me_cleaner-1.0.20171010`; a tool for disabling the Intel Management Engine, by modifying its firmware.
+  * Provides `me_cleaner-1.2`; a tool for disabling the Intel Management Engine, by modifying its firmware.
 * **media-gfx/fotoxx** [upstream](https://www.kornelix.net/fotoxx/fotoxx.html)
   * Provides `fotoxx-18.01.3`, a program for improving digital photographs (supports HDR etc.).
 
