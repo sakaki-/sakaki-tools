@@ -1,6 +1,5 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: $
 
 EAPI=5
 
@@ -24,7 +23,7 @@ DEPEND=">=sys-apps/gptfdisk-0.8.8
 RDEPEND="${DEPEND}
 	>=sys-libs/ncurses-5.9-r2
 	>=virtual/linux-sources-3
-	>=app-crypt/sbsigntool-0.6-r1
+	>=app-crypt/sbsigntools-0.6-r1
 	plymouth? ( >=sys-boot/plymouth-0.8.8-r4[gdm,libkms,pango] )
 	>=sys-kernel/genkernel-next-58[cryptsetup,gpg,plymouth?]
 	=app-crypt/staticgpg-1.4.16
@@ -49,17 +48,17 @@ src_install() {
 }
 pkg_preinst() {
 	if [ -e "${ROOT}/etc/${PN}.conf" ]; then
-	    # don't overwrite buildkernel.conf, user already has one,
-	    # and we don't want to force an unneeded dispatch-conf
-	    elog "/etc/${PN}.conf already exists, not overwriting."
-	    # install an identical copy; this is safer than deleting from
-	    # the pre-install image
-	    cp "${ROOT}/etc/${PN}.conf" "${D}/etc/${PN}.conf"
+		# don't overwrite buildkernel.conf, user already has one,
+		# and we don't want to force an unneeded dispatch-conf
+		elog "/etc/${PN}.conf already exists, not overwriting."
+		# install an identical copy; this is safer than deleting from
+		# the pre-install image
+		cp "${ROOT}/etc/${PN}.conf" "${D}/etc/${PN}.conf"
 	else
-	    # attempt to set the LUKS and EFI partition ids automatically
-	    # in the config file (in ${D}) if this can be done unambiguously
-	    set_luks_partuuid_if_exactly_one_found
-	    set_efi_partuuid_if_exactly_one_found_on_usb
+		# attempt to set the LUKS and EFI partition ids automatically
+		# in the config file (in ${D}) if this can be done unambiguously
+		set_luks_partuuid_if_exactly_one_found
+		set_efi_partuuid_if_exactly_one_found_on_usb
 	fi
 }
 pkg_postinst() {
