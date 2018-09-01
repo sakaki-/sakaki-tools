@@ -1,0 +1,66 @@
+Title: porthash error during genup (fix)
+Author: sakaki <sakaki@deciban.com>
+Content-Type: text/plain
+Posted: 2018-09-01
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Keyword: arm
+Display-If-Keyword: ppc
+Display-If-Installed: app-portage/porthash
+
+Introduction
+------------
+
+I have become aware of a bug in the app-portage/porthash-1.0.6
+repository verification script, which will cause the automatic weekly
+update (genup) process to fail for users of the gentoo-on-b2 and
+gentoo-on-b3 images. *A manual upgrade of this package is required* to
+address this issue, the (simple) process for which is presented in this
+news article, immediately below.
+
+Apologies for any inconvenience caused ><
+
+Fixing the Issue
+----------------
+
+To address the issue, open a terminal and issue the following commands,
+as the root user, on your b2 or b3:
+
+# emaint sync --repo sakaki-tools
+# emerge --update --oneshot --verbose app-portage/porthash
+
+This should upgrade porthash to >= 1.0.7. Once this is done, your
+automatic weekly genup run should start working again.
+
+That's it!
+
+Background to the Issue (Optional Reading)
+------------------------------------------
+
+The porthash utility creates, or by default checks, the validity of a
+repository master hash (repo.hash) and counterpart digital signature
+(repo.hash.asc), to allow verification of a Portage tree distributed
+over an unauthenticated channel such as rsync. There was no such
+'official' facility in Gentoo when the tool was originally deployed.
+
+However, when Gentoo started rolling out its official app-portage/gemato
+manifest verification tool, porthash was modified (at v1.0.6) to migrate
+the location of the repo.hash{,.asc} files, from the top level
+/usr/portage/ directory (where they would clash with gemato) to
+/usr/portage/local/, which gemato ignores.
+
+Unfortunately, during an rsync process of the Portage tree with the
+isshoni.org binhost, this local directory is *not* synced by default,
+but since (due to faulty logic; my bad) porthash-1.0.6 checks this
+location first when looking for the repo.hash{,.asc} files, the next
+time the tree is synced after the files have been migrated, the old
+(stale) /usr/portage/local/repo.hash{,.asc} files will be checked (not
+the fresh /usr/portage/repo.hash{,.asc} versions), and accordingly the
+signature verification will fail, and genup will halt with an error.
+
+This error is addressed in >=porthash-1.0.7, so upgrading this single
+package is sufficient to fix the problem.
+
+Thanks to orion777 and ericbish for reporting.
+
+Best, sakaki <sakaki@deciban.com>
