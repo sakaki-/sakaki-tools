@@ -20,4 +20,7 @@
 <use>
 		<flag name='buildkernel'>Enable support for buildkernel (include buildkernel dependency).</flag>
 </use>
+<use>
+		<flag name='emtee'>Enable support for emtee (include emtee dependency).</flag>
+</use>
 </pkgmetadata>
