@@ -6,7 +6,7 @@ EAPI=6
 
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc"
 
-DESCRIPTION="A faster-startup emerge -DuU --with-bdeps=y @world (et al.)"
+DESCRIPTION="A faster-startup emerge -DuU --with-bdeps=y @world"
 BASE_SERVER_URI="https://github.com/sakaki-"
 HOMEPAGE="${BASE_SERVER_URI}/${PN}"
 SRC_URI="${BASE_SERVER_URI}/${PN}/releases/download/v${PV}/${PN}-v${PV}.tar.gz"
