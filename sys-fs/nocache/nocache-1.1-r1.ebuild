@@ -27,4 +27,6 @@ src_compile(){
 
 src_install(){
 	einstall PREFIX=/usr DESTDIR="${D}" LIBDIR="/$(get_libdir)"
+	mkdir -pv "${D%/}"/usr/share/man/man1
+	mv -vf "${D%/}"/usr/share/man/{nocache,cachestats,cachedel}.1 "${D%/}"/usr/share/man/man1 || die
 }
