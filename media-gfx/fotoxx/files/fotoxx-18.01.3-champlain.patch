@@ -1,0 +1,13 @@
+--- a/Makefile
++++ b/Makefile
+@@ -25,8 +25,8 @@
+    -I/usr/include/cogl/                            \
+    -I/usr/include/json-glib-1.0/                   \
+    -I/usr/include/clutter-gtk-1.0/                 \
+-   -I/usr/include/libchamplain-gtk-0.12/           \
+-   -I/usr/include/libchamplain-0.12/
++   -I/usr/include/champlain-0.12/champlain-gtk/    \
++   -I/usr/include/champlain-0.12/
+ 
+ LIBS = `pkg-config --libs gtk+-3.0` -lpthread -ltiff -lpng -lraw -llcms2    \
+          -lclutter-1.0 -lclutter-gtk-1.0 -lchamplain-0.12 -lchamplain-gtk-0.12

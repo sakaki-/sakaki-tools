@@ -1,0 +1,49 @@
+--- f.effects.cc.orig	2019-07-30 21:51:13.094296016 +0100
++++ f.effects.cc	2019-07-30 21:52:59.202391473 +0100
+@@ -4685,8 +4685,8 @@
+ {
+    int         ww, hh;                                                           //  image dimensions
+    int         kernsize = 5;                                                     //  kernel size, N x N
+-   float       fmul = 1.0;                                                       //  multiplier
+-   int         fadd = 0;                                                         //  adder
++   float       fmpyer = 1.0;                                                       //  multiplier
++   int         fadder = 0;                                                         //  adder
+    int         kernel[15][15];                                                   //  up to 15 x 15
+    editfunc    EFanykernel;
+ }
+@@ -4829,8 +4829,8 @@
+             kernel[row-1][col-1] = value;
+          }
+          
+-         zdialog_fetch(zd,"fmul",fmul);                                          //  17.08
+-         zdialog_fetch(zd,"fadd",fadd);
++         zdialog_fetch(zd,"fmul",fmpyer);                                          //  17.08
++         zdialog_fetch(zd,"fadd",fadder);
+ 
+          signal_thread();                                                        //  start thread
+          return 1;
+@@ -4962,16 +4962,16 @@
+          blue  += kval * pixN[2];
+       }
+ 
+-      if (fmul != 1.0) {                                                         //  apply multiplier                   17.08
+-         red = fmul * red;
+-         green = fmul * green;
+-         blue = fmul * blue;
++      if (fmpyer != 1.0) {                                                         //  apply multiplier                   17.08
++         red = fmpyer * red;
++         green = fmpyer * green;
++         blue = fmpyer * blue;
+       }
+       
+-      if (fadd != 0) {                                                           //  apply adder                        17.08
+-         red = red + fadd;
+-         green = green + fadd;
+-         blue = blue + fadd;
++      if (fadder != 0) {                                                           //  apply adder                        17.08
++         red = red + fadder;
++         green = green + fadder;
++         blue = blue + fadder;
+       }
+ 
+       if (red < 0) red = 0;                                                      //  stop underflow
