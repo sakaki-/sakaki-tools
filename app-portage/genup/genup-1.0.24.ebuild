@@ -1,5 +1,6 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
+# $Header: $
 
 EAPI=5
 
@@ -13,13 +14,12 @@ SRC_URI="${BASE_SERVER_URI}/${PN}/releases/download/${PV}/${P}.tar.gz"
 LICENSE="GPL-3+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc"
-IUSE="+buildkernel emtee"
+IUSE="+buildkernel"
 
 RESTRICT="mirror"
 
 DEPEND=""
 RDEPEND="${DEPEND}
-	emtee? ( >=app-portage/emtee-1.0.2 )
 	>=sys-libs/ncurses-5.9-r2
 	>=app-portage/eix-0.29.3
 	>=app-admin/perl-cleaner-2.7
@@ -40,11 +40,6 @@ src_prepare() {
 		ewarn "you may still use genup, but must manually specify the"
 		ewarn "--no-kernel-upgrade option each time, unless you do"
 		ewarn "(otherwise, genup will fail)"
-	fi
-	if use emtee; then
-		elog "emtee USE flag selected - patching script accordingly."
-		sed -i -e 's@USE_EMTEE=false@USE_EMTEE=true@g' "${S}/${PN}" || \
-			die "Failed to patch script to reflect emtee USE flag."
 	fi
 	epatch_user
 }
