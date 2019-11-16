@@ -21,6 +21,7 @@
                 binhost is deployed).
 
                 It can be used in place of invocations like:
-                emerge -DuU --with-bdeps=y @world (and similar).
+                emerge -DuU --with-bdeps=y --keep-going @world
+                (and similar).
 </longdescription>
 </pkgmetadata>
