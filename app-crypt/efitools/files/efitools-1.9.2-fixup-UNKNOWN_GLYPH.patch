@@ -1,0 +1,12 @@
+diff -Naru a/lib/console.c b/lib/console.c
+--- a/lib/console.c	2019-11-28 13:59:02.099153788 +0100
++++ b/lib/console.c	2019-11-28 13:59:42.209153890 +0100
+@@ -357,7 +357,7 @@
+ 	{  EFI_SECURITY_VIOLATION,     L"Security Violation"},
+ 
+ 	// warnings
+-	{  EFI_WARN_UNKOWN_GLYPH,      L"Warning Unknown Glyph"},
++	{  EFI_WARN_UNKNOWN_GLYPH,     L"Warning Unknown Glyph"},
+ 	{  EFI_WARN_DELETE_FAILURE,    L"Warning Delete Failure"},
+ 	{  EFI_WARN_WRITE_FAILURE,     L"Warning Write Failure"},
+ 	{  EFI_WARN_BUFFER_TOO_SMALL,  L"Warning Buffer Too Small"}
