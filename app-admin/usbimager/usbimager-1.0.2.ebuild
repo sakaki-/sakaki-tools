@@ -2,7 +2,6 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-EGIT_REPO_URI="https://gitlab.com/bztsrc/${PN}.git"
 
 inherit desktop xdg-utils unpacker
 
