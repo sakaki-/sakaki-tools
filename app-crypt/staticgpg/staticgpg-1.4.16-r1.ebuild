@@ -51,6 +51,9 @@ src_configure() {
 
 	# force static compilation
 	append-ldflags -static
+	# workaround gcc 10 feature
+	# https://gcc.gnu.org/gcc-10/porting_to.html#common
+	append-flags -fcommon
 
 	econf \
 		--docdir="${EPREFIX}/usr/share/doc/${PF}" \
