@@ -1,7 +1,7 @@
 <repositories encoding="unicode" version="1.1">
   <repo priority="50" quality="experimental">
     <name>sakaki-tools</name>
-    <description>Various utility ebuilds for Gentoo on EFI</description>
+    <description>Utility ebuilds for Sakaki's EFI Install Guide</description>
     <owner>
       <email>sakaki@deciban.com</email>
       <name>sakaki</name>
