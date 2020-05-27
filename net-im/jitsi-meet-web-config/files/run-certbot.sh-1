@@ -1,0 +1,115 @@
+#!/bin/bash
+#
+# Loads the certbot configuration (if any) at
+# /etc/jitsi/certbot/certbot.conf, and if directed
+# invokes certbot to attempt to create (when run
+# the first time) or update (if a certbot-derived
+# certificate already exists) the current key/cert
+# pair for the specified domain.
+# 
+# A webroot-relative HTTP request will be used. If
+# successful, the current (self-generated) credentials at
+# at /etc/jitsi/meet/${LE_HOSTNAME}.{key,crt} will be
+# replaced by symlinks to
+# /etc/letsencrypt/live/${LE_HOSTNAME}/{privkey,fullcert}.pem,
+# the web server reloaded, and the turnserver restarted
+# (so they are taken up).
+#
+# Will return with an error if not run as root.
+# Will return without error (but doing nothing) if
+# no server is listening on port 80 when invoked.
+#
+# This script is intended to be run via a timer service
+# or cron. It writes logs to:
+# /var/log/jitsi/certbot.log (as root)
+#
+# Copyright (c) 2020 sakaki <sakaki@deciban.com>
+# License: GPL v3+
+# NO WARRANTY
+
+# may get called as cronjob, ensure $PATH sane
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin:${PATH}"
+
+
+if pidof -o %PPID -x "$(basename $0)" &>/dev/null; then
+        # already running
+        exit 0
+fi
+
+if (( EUID != 0 )); then
+	echo "You need to be root to run this program." >&2
+	exit 1
+fi
+
+# send all output to log
+[[ -d "/var/log/jitsi" ]] || exit 1
+{
+	echo "Starting certbot run on $(/bin/date -R)"
+
+	if ! /usr/bin/lsof -i ':80' &>/dev/null; then
+		# treat this as a clean exit
+		echo "No server bound on port 80; quitting" >&2
+		exit 0
+	fi
+
+	if [[ ! -s "/etc/jitsi/certbot/certbot.conf" ]]; then
+		# treat this as a clean exit; services not required
+		echo "No \"/etc/jitsi/certbot/certbot.conf\" file found; quitting" >&2
+		exit 0
+	fi
+
+	source "/etc/jitsi/certbot/certbot.conf"
+	if ! [[ "${LE_ENABLE_AUTO}" =~ ^[Yy]$ ]]; then
+		# treat this as a clean exit; services not required
+		echo "Let's Encrypt certificates not enabled; quitting" >&2
+		exit 0
+	fi
+
+	if ! [[ -d "${LE_WEBROOT}" ]]; then
+		echo "Specified webroot \"${LE_WEBROOT}\" is not a directory; quitting" >&2
+		exit 1
+	fi
+
+	if ! [[ -x "/usr/bin/certbot" ]]; then
+		echo "No executable \"/usr/bin/certbot\" found; quitting" >&2
+		exit 1
+	fi
+
+	# treat as first run if certificate does not exist
+	if ! [[ -e "/etc/letsencrypt/live/${LE_HOSTNAME}/privkey.pem" ]] || \
+		! [[ -e "/etc/letsencrypt/live/${LE_HOSTNAME}/fullchain.pem" ]]; then
+		# first run
+		echo "Attempting to register with Let's Encrypt for new cert/key pair"
+		/usr/bin/certbot certonly \
+			--domain "${LE_HOSTNAME}" \
+			--non-interactive \
+			--keep-until-expiring \
+			--webroot \
+			--webroot-path "${LE_WEBROOT}" \
+			--preferred-challenges http-01 \
+			--rsa-key-size 4096 \
+			--agree-tos \
+			--email "${LE_EMAIL}" \
+			--no-eff-email
+		RC=$?
+		# if successful, splice in the new certs
+		if ((RC==0)); then
+			echo "Initial certificate generation successful!"
+			echo "Splicing in new credentials"
+			ln -sf "/etc/letsencrypt/live/${LE_HOSTNAME}/privkey.pem" \
+				"/etc/jitsi/meet/${LE_HOSTNAME}.key"
+			ln -sf "/etc/letsencrypt/live/${LE_HOSTNAME}/fullchain.pem" \
+				"/etc/jitsi/meet/${LE_HOSTNAME}.crt"
+			echo "Reloading webserver config, restarting turnserver"
+			/usr/sbin/reload-webservers.sh
+		fi
+	else
+		# renewal run, we can rely on existing parameters
+		echo "Attempting to renew existing cert/key pair with Let's Encrypt"
+		/usr/bin/certbot renew \
+			--cert-name "${LE_HOSTNAME}" \
+			--deploy-hook /usr/sbin/reload-webservers.sh
+		RC=$?
+	fi
+} >>"/var/log/jitsi/certbot.log" 2>>"/var/log/jitsi/certbot.log"
+exit $RC

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<maintainer>
+				<email>dev@jitsi.org</email>
+				<name>Jitsi Team</name>
+		</maintainer>
+		<remote-id type="github">jitsi/jicofo</remote-id>
+		<bugs-to>mailto:dev@jitsi.org</bugs-to>
+	</upstream>
+	<maintainer type="person">
+		<email>sakaki@deciban.com</email>
+		<name>sakaki</name>
+	</maintainer>
+	<longdescription>
+		JItsi Meet COnference FOcus server (media session manager)
+
+ 		JItsi COnference FOcus is a mandatory server-side focus
+		component used in Jitsi Meet conferences. It is
+		responsible for managing media sessions between
+		each of the participants and the videobridge.
+
+		NB: ebuild versioning follows that of the release tarballs
+		and reflects upstream's deb variant; however, please note
+		that the _slot_ for the resulting application jar is 1.1 (not 1.0).
+	</longdescription>
+</pkgmetadata>
+

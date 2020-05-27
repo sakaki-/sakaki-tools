@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# Executes the run-cerbot.sh program after a
+# random delay of up to around 2 hours.
+# Designed to be placed in /etc/cron.daily
+#
+# Copyright (c) 2020 sakaki <sakaki@deciban.com>
+# License: GPL v3+
+# NO WARRANTY
+
+# dither startup by 0-8191 seconds (approx 2.2 hours)
+# avoids sync hit on Let's Encrypt's servers
+/usr/bin/sleep $((RANDOM/4))s
+exec /usr/sbin/run-certbot.sh
+

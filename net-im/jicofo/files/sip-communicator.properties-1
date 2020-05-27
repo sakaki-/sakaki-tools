@@ -1,0 +1,7 @@
+# sip-communicator.properties
+
+# migrating to use mucs now
+# replace jitsi.example.com with your XMPP hostname
+org.jitsi.jicofo.BRIDGE_MUC=JvbBrewery@internal.auth.jitsi.example.com
+org.jitsi.jicofo.auth.URL=XMPP:jitsi.example.com
+

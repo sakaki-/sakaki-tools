@@ -1,0 +1,148 @@
+# Master config used to create a Jitsi Meet instance
+#
+# NB only single-box deployments are covered by
+# this simplified approach; if you need something more
+# complex, you should provision the component server
+# configuration files yourself
+#
+# Approach inspired by a combination of upstream's:
+# * docker-jitsi-meet env file, and
+# * debconf key-value store used by the packaged debs.
+
+
+# If set to "y", then:
+#   emerge --config jitsi-meet-master-config
+# will use the values in this file directly, without
+# prompting the user
+# debconf key(s): none
+JMMC_BATCH_MODE="n"
+
+# Hostname of the XMPP (prosody) server; default localhost
+# debconf key(s): none
+JVB_HOST=""
+
+# Port on which the XMPP server is listening, default 5347
+# debconf key(s): none
+JVB_PORT=""
+
+# XMPP domain of the prosody server
+# and (for this single-box configuration) the
+# FQDN of the webserver
+# debconf key(s): jitsi-meet-prosody/jvb-hostname,
+#                 jitsi-videobridge/jvb-hostname
+#                 jitsi-meet-turnserver/jvb-hostname
+#                 jitsi-meet/jvb-hostname
+JVB_HOSTNAME=""
+
+# Whether or not to set (as recommended) the
+# value in /etc/hostname to match JVB_HOSTNAME
+# debconf key(s): none
+JVB_CONFORM_ETC_HOSTNAME=""
+
+# External IP address of the webserver / videobridge
+# if known (and fixed); otherwise localhost
+# debconf key(s): none
+JVB_EXTERNAL_IP=""
+
+# Internal IP address of the webserver / videobridge
+# if known (and fixed); should be identical to
+# JVB_EXTERNAL_IP unless running behind a NAT
+# debconf key(s): none
+JVB_INTERNAL_IP=""
+
+# Whether or not to include the specified hostname
+# as a localhost alias (preferred)
+# debconf key(s): none
+JVB_HOSTNAME_LOCALHOST_ALIAS=""
+
+# XMPP user for JVB client connections
+# debconf key(s): none
+JVB_AUTH_USER=""
+
+# XPP password for JVB client connections
+# debconf key(s): none
+JVB_AUTH_PASSWORD=""
+
+# Maximum RAM for videobridge daemon
+# debconf key(s): none
+JVB_MAX_MEMORY=""
+
+# Whether (if "y") an existing webserver SSL certificate
+# is supplied (in which case, JM_WEB_CERT_{KEY,CRT}
+# must be set), or (if "n") should be auto-created
+# (the latter case is easy to swap out for a letsencrypt
+# certificate later)
+# debconf key(s): jitsi-meet/cert-choice (~)
+JM_SUPPLY_OWN_CRT=""
+
+# Path to SSL key to use for the webserver and turnserver
+# debconf key(s): jitsi-meet/cert-path-key
+JM_WEB_CERT_KEY=""
+
+# Path to counterpart SSL certificate to use for the
+# webserver and turnserver
+# debconf key(s): jitsi-meet/cert-path-crt
+JM_WEB_CERT_CRT=""
+
+# The authenticated user that will act as jicofo's XMPP
+# server (prosody) admin
+# debconf key(s): jicofo/jicofo-authuser
+JICOFO_AUTH_USER=""
+
+# Authenticated domain for use by the jicofo auth user
+# debconf key(s): none
+JICOFO_AUTH_DOMAIN=""
+
+# The secret used to connect to the XMPP server as the jicofo auth
+# user (distinct from component secret)
+# debconf key(s): jicofo/jicofo-authpassword
+JICOFO_AUTH_PASSWORD=""
+
+# The authenticated user who is allowed to start
+# (convene) new meetings
+# debconf key(s): none
+JICOFO_CONVENE_USER=""
+
+# The secret used to connect to the XMPP server as the
+# new meeting convener
+JICOFO_CONVENE_PASSWORD=""
+
+# Jitsi VideoBridge XMPP component secret, used to connect to the XMPP
+# server (prosody)
+# debconf key(s): jitsi-videobridge/jvbsecret
+JVB_SECRET=""
+
+# jicofo component secret, used to connect to the XMPP server (prosody)
+# debconf key(s): jicofo/jicofosecret
+JICOFO_SECRET=""
+
+# Secret used to connect to TURN server
+# debconf value: jitsi-meet-prosody/turn-secret
+TURN_SECRET=""
+
+# UUID of multi-user-chat (MUC) used for message passing
+# debconf key(s): none
+MUC_UUID=""
+
+# Whether to enable automatic Let's Encrypt certificate
+# generation (this being y implies the user has
+# agreed to the Let's Encrypt ToS)
+# debconf key(s): none
+LE_ENABLE_AUTO=""
+
+# The FQDN of the (web) server for which Let's Encrypt
+# certificates are to be managed
+# debconf key(s): none
+LE_HOSTNAME=""
+
+# Contact email address for the server admin, for
+# use with Let's Encrypt
+# debconf key(s): none
+LE_EMAIL=""
+
+# Root location for the (port 80) web server, used to hold the
+# .well-known/acme-challenge directory for use
+# with certbot
+# debconf key(s): none
+LE_WEBROOT=""
+

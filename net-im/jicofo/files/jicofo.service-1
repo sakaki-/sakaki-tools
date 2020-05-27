@@ -1,0 +1,16 @@
+[Unit]
+Description=JItsi COnference FOcus server (media session manager)
+Wants=prosody.service
+After=network.target prosody.service
+
+[Service]
+SuccessExitStatus=143
+EnvironmentFile=/etc/jitsi/jicofo/config
+Environment=LOGFILE=/var/log/jitsi/jicofo.log
+User=jicofo
+Group=jitsi
+WorkingDirectory=/usr/share/jicofo
+ExecStart=/usr/bin/jicofo-systemd.sh
+
+[Install]
+WantedBy=multi-user.target

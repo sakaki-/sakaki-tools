@@ -1,0 +1,25 @@
+#!/sbin/openrc-run
+# Copyright 2020 sakaki <sakaki@deciban.com>
+# Distributed under the terms of the GNU General Public License v2
+
+description="WebRTC compatible Selective Forwarding Unit (SFU)"
+
+# logs to /var/log/jitsi/jvb.log
+
+pidfile="/var/run/jvb/jvb.pid"
+# launcher script below will work on OpenRC also
+command="/usr/bin/jvb-systemd.sh"
+command_user="jvb:jitsi"
+command_background=true
+
+depend() {
+	need net
+	want jabber-server
+}
+
+start_pre() {
+	mkdir -m 770 -p /var/run/jvb
+	chown "${command_user}" /var/run/jvb
+	return 0
+}
+

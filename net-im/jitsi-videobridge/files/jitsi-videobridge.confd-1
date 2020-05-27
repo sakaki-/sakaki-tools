@@ -1,0 +1,12 @@
+# configuration options for the Jitsi VideoBridge follow
+
+# read in additional configuration files, if supplied,
+# from /etc/jitsi/videobridge/config.d/*.conf
+CDIR="/etc/jitsi/videobridge/config.d"
+if [[ -d "${CDIR}" ]]; then
+	if find "${CDIR}" -mindepth 1 -maxdepth 1 -type f -name '*.conf' | grep -q "."; then
+		for CFILE in "${CDIR}"/*.conf; do
+			source "${CFILE}"
+		done
+	fi
+fi

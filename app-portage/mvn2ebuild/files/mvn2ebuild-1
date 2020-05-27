@@ -1,0 +1,112 @@
+#!/bin/bash
+#
+# Run in the top-level of a Maven project (once you have it
+# building correctly) in place of the "mvn" command, and
+# a 'starter' ebuild, using java-maven-pkg, will be
+# emitted to stdout (all other output is to stderr).
+#
+# Copyright (c) 2020 sakaki <sakaki@deciban.com>
+# License: GPL v3+
+# NO WARRANTY
+
+
+T="$(mktemp -d)"
+D="${T##*/}"
+
+if [[ -z ${@} ]]; then
+	EMAVEN_PARAMS="-DskipTests -Dassembly.skipAssembly=false clean package install -f pom.xml"
+else
+	EMAVEN_PARAMS="${@}"
+fi
+if [[ $(uname -m) == "aarch64" ]]; then
+	EMAVEN_PARAMS+=" -Dos.detected.name=linux -Dos.detected.arch=aarch_64 -Dos.detected.classifier=linux-aarch_64"
+else
+	EMAVEN_PARAMS+=" -Dos.detected.name=linux -Dos.detected.arch=x86_64 -Dos.detected.classifier=linux-x86_64"
+fi
+EMAVEN_PARAMS+=" --batch-mode -Dmaven.repo.local=${T}"
+
+GIT_ECLASS=""
+GIT_DEFBLOCK=""
+
+# are we in a git repo?
+if GIT_COMMIT="$(git rev-parse HEAD)" 2>/dev/null; then
+	GIT_ECLASS=" git-r3"
+	GIT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+	GIT_REMOTE_URL="$(git remote get-url origin)"
+	GIT_DEFBLOCK="
+EGIT_REPO_URI=\"${GIT_REMOTE_URL%.git}.git\"
+EGIT_BRANCH=\"${GIT_BRANCH}\"
+EGIT_COMMIT=\"${GIT_COMMIT}\"
+"
+fi
+
+echo "Running Maven: all output to stderr..." >&2
+echo "Params: ${EMAVEN_PARAMS}" >&2
+
+EMAVEN_VENDOR_DEFS="$(mvn ${EMAVEN_PARAMS} |& tee /dev/fd/2 | \
+	grep 'Downloaded' | \
+	grep -o 'https[^[:space:]]*' | sort | uniq | \
+	sed -r 's/^/\t"/g;s/$/"/g;s#(releases|maven2)/+#\1 #g;s#/(org|com|net)/# \1/#g')"
+
+rm -rf "/tmp/${D}"
+
+echo "Ouputting skeleton ebuild to stdout..." >&2
+
+cat <<EOF
+# Copyright 2020 <yourname> (<your@e.mail>)
+# Distributed under the terms of the GNU General Public License v2
+
+EAPI=7
+
+JAVA_PKG_IUSE=""
+
+inherit unpacker java-pkg-2 java-maven-pkg${GIT_ECLASS}
+
+DESCRIPTION=""
+SRC_URI=""
+HOMEPAGE=""
+RESTRICT="mirror"
+
+JAVA_PKG_NO_CLEAN=1
+
+LICENSE="Apache-2.0"
+SLOT="0"
+KEYWORDS="~amd64 ~arm64"
+IUSE=""
+${GIT_DEFBLOCK}
+CP_DEPEND="
+"
+CDEPEND="
+"
+DEPEND="
+	\${CP_DEPEND}
+	\${CDEPEND}
+"
+RDEPEND="
+	\${CP_DEPEND}
+	\${CDEPEND}
+	>=virtual/jre-1.8
+"
+BDEPEND="
+	\${CP_DEPEND}
+	\${CDEPEND}
+	>=virtual/jdk-1.8
+"
+
+JAVA_GENTOO_CLASSPATH=""
+JAVA_GENTOO_CLASSPATH_EXTRA=""
+
+EMAVEN_VENDOR=(
+${EMAVEN_VENDOR_DEFS}
+)
+
+setup_maven_src_uri
+
+PATCHES=(
+)
+
+EMAVEN_PARAMS+=""
+#EMAVEN_INSTALL_JAR_FROM=""
+#EMAVEN_INSTALL_JAR_TO=""
+
+EOF

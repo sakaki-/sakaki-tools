@@ -1,0 +1,28 @@
+#!/bin/bash
+#
+# Simple check to see if jitsi-meet-master-config
+# has been configured at the time the service is
+# started, printing an appropriate message.
+#
+# Copyright (c) 2020 sakaki <sakaki@deciban.com>
+# License: GPL v3+
+# NO WARRANTY
+
+if [[ ! -e "/etc/jitsi/.configured" ]]; then
+	{
+		echo "Your Jitsi system has started, but has not been configured."
+		echo "It will almost certainly NOT work as you want it to."
+		echo ""
+		echo "To configure your system, simply issue:"
+		echo "  emerge --config net-im/jitsi-meet-master-config"
+		echo "followed by:"
+		echo "  systemctl restart jitsi-meet-server"
+		echo "to have the new config taken up."
+	} >&2
+else
+	source "/etc/jitsi/jitsi-meet-master-config"
+	echo "Your Jitsi Meet server complex has started!"
+	echo "Browse to:"
+	echo "  https://${JVB_HOSTNAME}"
+	echo "to start a new meeting!"
+fi

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<maintainer>
+				<email>dev@jitsi.org</email>
+				<name>Jitsi Team</name>
+		</maintainer>
+		<remote-id type="github">jitsi/jitsi-videobridge</remote-id>
+		<bugs-to>mailto:dev@jitsi.org</bugs-to>
+	</upstream>
+	<maintainer type="person">
+		<email>sakaki@deciban.com</email>
+		<name>sakaki</name>
+	</maintainer>
+	<longdescription>
+		Jitsi Videobridge is a WebRTC compatible Selective Forwarding Unit
+		(SFU) for multiuser video communication. It is an essential part
+		of Jitsi Meet.
+	</longdescription>
+	<use>
+		<flag name="authbind">Use authbind to access privileged ports without root</flag>
+	</use>
+</pkgmetadata>
+

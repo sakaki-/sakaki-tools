@@ -1,0 +1,11 @@
+[Unit]
+Description=Automated TLS certificate creation / renewal for webserver(s)
+After=network.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/etc/jitsi/certbot
+ExecStart=/usr/sbin/run-certbot.sh
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,12 @@
+--- a/doc/debian/jitsi-meet/jitsi-meet.example
++++ b/doc/debian/jitsi-meet/jitsi-meet.example
+@@ -7,7 +7,7 @@
+ 
+     location ^~ /.well-known/acme-challenge/ {
+        default_type "text/plain";
+-       root         /usr/share/jitsi-meet;
++       root         /var/lib/jitsi-meet-web-config;
+     }
+     location = /.well-known/acme-challenge/ {
+        return 404;
+

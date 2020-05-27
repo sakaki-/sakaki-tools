@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<maintainer>
+				<email>dev@jitsi.org</email>
+				<name>Jitsi Team</name>
+		</maintainer>
+		<remote-id type="github">jitsi/jitsi-meet</remote-id>
+		<bugs-to>mailto:dev@jitsi.org</bugs-to>
+	</upstream>
+	<maintainer type="person">
+		<email>sakaki@deciban.com</email>
+		<name>sakaki</name>
+	</maintainer>
+	<longdescription>
+		WebRTC JavaScript videoconferencing client
+
+		Jitsi Meet is a WebRTC JavaScript/WASM application that uses Jitsi
+		Videobridge to provide high quality, scalable videoconferencing.
+
+		This package provides the web-server root filestructure needed to
+		distribute this application, installed at /usr/share/jitsi-meet.
+
+		The tree is taken directly from Jitsi's corresponding upstream deb;
+		no server-side native binaries are requried, so this is safe to do.
+		The web structure may be built via npm, for those interested,
+		following the istructions at e.g.:
+		https://github.com/jitsi/jitsi-meet/blob/master/doc/manual-install.md#deploy-jitsi-meet
+	</longdescription>
+</pkgmetadata>
+

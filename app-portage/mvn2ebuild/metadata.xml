@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+<maintainer status="active">
+		<email>sakaki@deciban.com</email>
+		<name>sakaki</name>
+</maintainer>
+<upstream>
+		<maintainer status="active">
+				<email>sakaki@deciban.com</email>
+				<name>sakaki</name>
+		</maintainer>
+		<bugs-to>mailto:sakaki@deciban.com</bugs-to>
+</upstream>
+<longdescription>
+                mvn2ebuild is a simple script that can be used
+		to create a 'starter' ebuild for a Maven project
+		(Java language), leveraging the java-maven-pkg
+		eclass.
+
+		The script is run in your top level project
+		directory, in place of mvn, once you have a working
+		build. The resulting ebuild is written to stdout.
+</longdescription>
+</pkgmetadata>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<maintainer>
+				<email>dev@jitsi.org</email>
+				<name>Jitsi Team</name>
+		</maintainer>
+		<remote-id type="github">jitsi/jitsi-sctp</remote-id>
+		<bugs-to>mailto:dev@jitsi.org</bugs-to>
+	</upstream>
+	<upstream>
+		<maintainer status="active">
+				<name>Yury Yaroshevich</name>
+		</maintainer>
+		<remote-id type="github">mstyura/jitsi-sctp</remote-id>
+	</upstream>
+	<maintainer type="person">
+		<email>sakaki@deciban.com</email>
+		<name>sakaki</name>
+	</maintainer>
+	<longdescription>
+		JNI component for the usrsctp library
+
+		The jitsi-sctp project creates a JNI wrapper around the
+		usrsctp library and provides a set of Java classes to further
+		flesh out a convenient Java SCTP API, which can be used on
+		Linux, MacOS X, FreeBSD and Windows.
+
+		The ebuild uses a fork which can create a native platform
+		specific artefact for aarch64 (required by e.g.
+		the Jitsi Videobridge on ARMv8a platforms in 64-bit mode),
+		as well as for the more common x86_64 architecture.
+	</longdescription>
+</pkgmetadata>
+

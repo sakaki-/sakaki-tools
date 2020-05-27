@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>sakaki@deciban.com</email>
+		<name>sakaki</name>
+	</maintainer>
+	<longdescription>
+		A user for Jitsi Videobridge SFU
+	</longdescription>
+</pkgmetadata>
+

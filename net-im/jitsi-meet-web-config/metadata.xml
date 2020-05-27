@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<maintainer>
+				<email>dev@jitsi.org</email>
+				<name>Jitsi Team</name>
+		</maintainer>
+		<remote-id type="github">jitsi/jitsi-meet</remote-id>
+		<bugs-to>mailto:dev@jitsi.org</bugs-to>
+	</upstream>
+	<maintainer type="person">
+		<email>sakaki@deciban.com</email>
+		<name>sakaki</name>
+	</maintainer>
+	<longdescription>
+		Configuration for webserving Jitsi Meet.
+
+		This package contains configuration for Nginx and Apache
+		webservers, allowing them to distribute the Jitsi Meet
+		WebRTC, JavaScript/WASM-based videoconferencing client.
+
+		Weekly renewal checks for Let's Encrypt TLS certicates
+		are also configured (via certbot) where required.
+	</longdescription>
+	<use>
+		<flag name="systemd">Use systemd timers for certbot renewal, rather than cron</flag>
+	</use>
+</pkgmetadata>
+

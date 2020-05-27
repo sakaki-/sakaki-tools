@@ -1,0 +1,31 @@
+# configuration options for the Jitsi VideoBridge
+# on XMPP domain jitsi.example.com
+
+# the hostname of the XMPP server (i.e., prosody)
+JVB_HOST="localhost"
+
+# the XMPP domain (NB, internal; can be distinct
+# from webserver FQDN, but is usually the same as it for a
+# single-box install)
+JVB_HOSTNAME="jitsi.example.com"
+
+# the port of the XMPP server
+JVB_PORT="5347"
+
+# the shared secret used to authenticate to the XMPP server
+JVB_SECRET="changeme111"
+
+# XMPP user for JVB client connections
+JVB_AUTH_USER="jvm"
+
+# XPP password for JVB client connections
+JVB_AUTH_PASSWORD="changeme555"
+
+# External IP address of the videobridge
+JVB_EXTERNAL_IP="192.168.1.1"
+
+# Internal IP address of the videobridge
+JVB_INTERNAL_IP="82.221.139.201"
+
+# Maximum RAM for videobridge daemon
+JVB_MAX_MEMORY="1024m"

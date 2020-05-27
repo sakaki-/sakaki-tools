@@ -1,0 +1,18 @@
+# /etc/jitsi/config-updaters.d/70-jitsi-meet-web
+#
+# Sourced into pkg_config of jitsi-meet-master-config.
+# This script fragment uses the master configuration
+# variables from /etc/jitsi/jitsi-meet-master-config
+# (which are all set up already when this fragment is
+# sourced), and currently simply displays a short
+# message.
+#
+# Flow adapted with thanks from the upstream deb postinst.
+#
+# Copyright (c) 2020 sakaki <sakaki@deciban.com>
+# License: GPL v3+
+# NO WARRANTY
+
+# currently no specific setup steps required here
+einfo "Configured successfully."
+

@@ -1,0 +1,91 @@
+# /etc/jitsi/config-updaters.d/30-jitsi-videobridge
+#
+# Sourced into pkg_config of jitsi-meet-master-config.
+# This script fragment uses the master configuration
+# variables from /etc/jitsi/jitsi-meet-master-config
+# (which are all set up already when this fragment is
+# sourced), configures a new file in /etc/jitsi/videobridge/config.d,
+# and also sets up
+# /etc/jitsi/videobridge/sip-communicator.properties,
+# /etc/jitsi/videobridge/logging.properties,
+# /etc/jitsi/videobridge/callstats-java-sdk.properties, and
+# /etc/jitsi/videobridge/log4j2.xml. Note that
+# any prior config, as denoted in ${JVB_PRIOR_HOSTNAME},
+# will be removed when this fragment is sourced.
+#
+# At this time, there are no other bringup steps required for
+# jitsi-videobridge (creation of certs etc).
+#
+# Flow adapted with thanks from the upstream deb postinst.
+#
+# Copyright (c) 2020 sakaki <sakaki@deciban.com>
+# License: GPL v3+
+# NO WARRANTY
+
+
+if [[ "${JVB_PRIOR_HOSTNAME}" != "${JVB_HOSTNAME}" && ! -z "${JVB_PRIOR_HOSTNAME}" ]]; then
+	ewarn "Removing prior setup for ${JVB_PRIOR_HOSTNAME}"
+	rm -f "${EROOT%/}/etc/jitsi/videobridge/config.d/${JVB_PRIOR_HOSTNAME}.conf"
+	rm -f "${EROOT%/}/etc/jitsi/videobridge/logging.properties"
+	rm -f "${EROOT%/}/etc/jitsi/videobridge/sip-communicator.properties"
+	rm -f "${EROOT%/}/etc/jitsi/videobridge/callstats-java-sdk.properties"
+	rm -f "${EROOT%/}/etc/jitsi/videobridge/log4j2.xml"
+fi
+
+einfo "Writing new config to:"
+einfo "  ${EROOT%/}/etc/jitsi/videobridge/config.d/${JVB_HOSTNAME}.conf"
+sed -e \
+'s/localhost/'"${JVB_HOST}"'/g ; '\
+'s/auth\.jitsi\.example\.com/'"auth.${JVB_HOSTNAME}"'/g ; '\
+'s/jitsi\.example\.com/'"${JVB_HOSTNAME}"'/g ; '\
+'s/5347/'"${JVB_PORT}"'/g ; '\
+'s/changeme111/'"${JVB_SECRET}"'/g ; '\
+'s/="jvb"/="'"${JVB_AUTH_USER}"'"/g ; '\
+'s/changeme555/'"${JVB_AUTH_PASSWORD}"'/g ; '\
+'s/192\.168\.1\.1/'"${JVB_INTERNAL_IP}"'/g ; '\
+'s/82\.221\.139\.201/'"${JVB_EXTERNAL_IP}"'/g ; '\
+'s/="1024m"/="'"${JVB_MAX_MEMORY}"'"/g '\
+	< "${EROOT%/}/usr/share/jitsi-videobridge/jitsi.example.com.conf" \
+	> "${EROOT%/}/etc/jitsi/videobridge/config.d/${JVB_HOSTNAME}.conf"
+# the following three files we can just copy verbatim, no
+# customization required
+einfo "Writing logging settings files to:"
+einfo "  ${EROOT%/}/etc/jitsi/videobridge/logging.properties"
+einfo "  ${EROOT%/}/etc/jitsi/videobridge/callstats-java-sdk.properties"
+einfo "  ${EROOT%/}/etc/jitsi/videobridge/log4j2.xml"
+cp "${EROOT%/}/usr/share/jitsi-videobridge/logging.properties" \
+	"${EROOT%/}/etc/jitsi/videobridge/logging.properties"
+cp "${EROOT%/}/usr/share/jitsi-videobridge/callstats-java-sdk.properties" \
+	"${EROOT%/}/etc/jitsi/videobridge/callstats-java-sdk.properties"
+cp "${EROOT%/}/usr/share/jitsi-videobridge/log4j2.xml" \
+	"${EROOT%/}/etc/jitsi/videobridge/log4j2.xml"
+# sip-communicator.properties though does need
+# tweaking
+einfo "Writing new sip-communicator settings to:"
+einfo "  ${EROOT%/}/etc/jitsi/videobridge/sip-communicator.properties"
+sed -e \
+'s/localhost/'"${JVB_HOST}"'/g ; '\
+'s/auth\.jitsi\.example\.com/'"auth.${JVB_HOSTNAME}"'/g ; '\
+'s/changeme111/'"${JVB_SECRET}"'/g ; '\
+'s/bedabb1e-be11-b01d-bead-5ea1edca11ed/'"${MUC_UUID}"'/g ; '\
+'s/=jvb$/='"${JVB_AUTH_USER}"'/g ; '\
+'s/changeme555/'"${JVB_AUTH_PASSWORD}"'/g ; '\
+'s/192\.168\.1\.1/'"${JVB_INTERNAL_IP}"'/g ; '\
+'s/82\.221\.139\.201/'"${JVB_EXTERNAL_IP}"'/g ; '\
+'/^# replace/d'\
+	< "${EROOT%/}/usr/share/jitsi-videobridge/sip-communicator.properties" \
+	> "${EROOT%/}/etc/jitsi/videobridge/sip-communicator.properties"
+# remove explicit setting of internal/external IP address where
+# both the same
+if [[ "${JVB_INTERNAL_IP}" == "${JVB_EXTERNAL_IP}" ]]; then
+	sed -i '/NAT_HARVESTER_\(LOCAL\|PUBLIC\)_ADDRESS/d' \
+		"${EROOT%/}/etc/jitsi/videobridge/sip-communicator.properties"
+fi
+
+chmod 640 "${EROOT%/}/etc/jitsi/videobridge/"{logging,sip-communicator,callstats-java-sdk}.properties
+chmod 640 "${EROOT%/}/etc/jitsi/videobridge/log4j2.xml"
+chmod 640 "${EROOT%/}/etc/jitsi/videobridge/config.d/${JVB_HOSTNAME}.conf"
+chown jvb:jitsi "${EROOT%/}/etc/jitsi/videobridge/"{logging,sip-communicator,callstats-java-sdk}.properties
+chown jvb:jitsi "${EROOT%/}/etc/jitsi/videobridge/log4j2.xml"
+chown jvb:jitsi "${EROOT%/}/etc/jitsi/videobridge/config.d/${JVB_HOSTNAME}.conf"
+

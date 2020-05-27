@@ -1,0 +1,21 @@
+# configuration options for the certbot TLS
+# certificate renewal service, on domain jitsi.example.com
+
+# Whether to enable automatic Let's Encrypt certificate
+# generation (this being y implies the user has
+# agreed to the Let's Encrypt ToS)
+LE_ENABLE_AUTO="y"
+
+# The FQDN of the (web) server for which Let's Encrypt
+# certificates are to be managed
+LE_HOSTNAME="jitsi-meet.example.com"
+
+# Contact email address for the server admin, for
+# Let's Encrypt
+LE_EMAIL="webmaster@jitsi-meet.example.com"
+
+# Root location for the (port 80) web server, used to hold the
+# .well-known/acme-challenge directory for use
+# with certbot
+LE_WEBROOT="/var/lib/jitsi-meet-web-config"
+

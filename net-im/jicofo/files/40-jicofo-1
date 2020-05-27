@@ -1,0 +1,69 @@
+# /etc/jitsi/config-updaters.d/40-jicofo
+#
+# Sourced into pkg_config of jitsi-meet-master-config.
+# This script fragment uses the master configuration
+# variables from /etc/jitsi/jitsi-meet-master-config
+# (which are all set up already when this fragment is
+# sourced), configures a new file in /etc/jitsi/jicofo/config.d,
+# and also sets up
+# /etc/jitsi/jicofo/sip-communicator.properties and
+# /etc/jitsi/jicofo/logging.properties. Note that
+# any prior config, as denoted in ${JVB_PRIOR_HOSTNAME},
+# will be removed when this fragment is sourced.
+#
+# At this time, there are no other bringup steps required for
+# jicofo (creation of certs etc).
+#
+# Flow adapted with thanks from the upstream deb postinst.
+#
+# Copyright (c) 2020 sakaki <sakaki@deciban.com>
+# License: GPL v3+
+# NO WARRANTY
+
+# please note that ${JVB_PRIOR_HOSTNAME},
+# ${JVB_HOSTNAME}, ${JVB_HOST} and ${JVB_PORT} refer to
+# the XMPP (prosody) server, so we can use them here - they
+# aren't 'VideoBridge' specific (in the way that, e.g.,
+# ${JVB_SECRET} is)
+
+if [[ "${JVB_PRIOR_HOSTNAME}" != "${JVB_HOSTNAME}" && ! -z "${JVB_PRIOR_HOSTNAME}" ]]; then
+	ewarn "Removing prior setup for ${JVB_PRIOR_HOSTNAME}"
+	rm -f "${EROOT%/}/etc/jitsi/jicofo/config.d/${JVB_PRIOR_HOSTNAME}.conf"
+	rm -f "${EROOT%/}/etc/jitsi/jicofo/logging.properties"
+	rm -f "${EROOT%/}/etc/jitsi/jicofo/sip-communicator.properties"
+fi
+
+einfo "Writing new config to:"
+einfo "  ${EROOT%/}/etc/jitsi/jicofo/config.d/${JVB_HOSTNAME}.conf"
+sed -e \
+'s/auth.jitsi.example.com/'"${JICOFO_AUTH_DOMAIN}"'/g ; '\
+'s/5347/'"${JVB_PORT}"'/g ; '\
+'s/jitsi.example.com/'"${JVB_HOSTNAME}"'/g ; '\
+'s/focus/'"${JICOFO_AUTH_USER}"'/g ; '\
+'s/changeme333/'"${JICOFO_AUTH_PASSWORD}"'/g ; '\
+'s/changeme222/'"${JICOFO_SECRET}"'/g ; '\
+'s/conveneuser/'"${JICOFO_CONVENE_USER}"'/g ; '\
+'s/change-me/'"${JICOFO_CONVENE_PASSWORD}"'/g '\
+	< "${EROOT%/}/usr/share/jicofo/jitsi.example.com.conf" \
+	> "${EROOT%/}/etc/jitsi/jicofo/config.d/${JVB_HOSTNAME}.conf"
+# logging.properties we can just copy verbatim, no
+# customization required
+einfo "Writing logging settings file to:"
+einfo "  ${EROOT%/}/etc/jitsi/jicofo/logging.properties"
+cp "${EROOT%/}/usr/share/jicofo/logging.properties" \
+	"${EROOT%/}/etc/jitsi/jicofo/logging.properties"
+# sip-communicator.properties though does need
+# tweaking
+einfo "Writing new sip-communicator settings to:"
+einfo "  ${EROOT%/}/etc/jitsi/jicofo/sip-communicator.properties"
+sed -e \
+'s/auth.jitsi.example.com/'"${JICOFO_AUTH_DOMAIN}"'/g ; '\
+'s/jitsi.example.com/'"${JVB_HOSTNAME}"'/g ; '\
+'/^# replace/d'\
+	< "${EROOT%/}/usr/share/jicofo/sip-communicator.properties" \
+	> "${EROOT%/}/etc/jitsi/jicofo/sip-communicator.properties"
+chmod 640 "${EROOT%/}/etc/jitsi/jicofo/"{logging,sip-communicator}.properties
+chmod 640 "${EROOT%/}/etc/jitsi/jicofo/config.d/${JVB_HOSTNAME}.conf"
+chown jicofo:jitsi "${EROOT%/}/etc/jitsi/jicofo/"{logging,sip-communicator}.properties
+chown jicofo:jitsi "${EROOT%/}/etc/jitsi/jicofo/config.d/${JVB_HOSTNAME}.conf"
+

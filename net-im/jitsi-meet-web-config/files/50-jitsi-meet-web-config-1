@@ -1,0 +1,133 @@
+# /etc/jitsi/config-updaters.d/50-jitsi-meet-web-config
+#
+# Sourced into pkg_config of jitsi-meet-master-config.
+# This script fragment uses the master configuration
+# variables from /etc/jitsi/jitsi-meet-master-config
+# (which are all set up already when this fragment is
+# sourced), sets up a new configuration file
+# in /etc/jitsi/meet/<name>-config.js, and also
+# creates appropriate entries in
+# /etc/{apache2,nginx}/<name>.conf. If the user has
+# asked for a self-signed keypair to be generated, one
+# will be created here and saved to
+# /etc/jitsi/meet/<name>.{key,crt}. If they have
+# asked for a Let's Encrypt certificate to be
+# used, the appropriate config will be created at
+# /etc/jitsi/certbot/certbot.conf. Note
+# that any prior config, as denoted in ${JVB_PRIOR_HOSTNAME},
+# will be removed when this fragment is sourced.
+#
+# Flow adapted with thanks from the upstream deb postinst.
+#
+# Copyright (c) 2020 sakaki <sakaki@deciban.com>
+# License: GPL v3+
+# NO WARRANTY
+
+if [[ "${JVB_PRIOR_HOSTNAME}" != "${JVB_HOSTNAME}" && ! -z "${JVB_PRIOR_HOSTNAME}" ]]; then
+	ewarn "Removing prior setup for ${JVB_PRIOR_HOSTNAME}"
+	# common
+        rm -f "${EROOT%/}/etc/jitsi/meet/${JVB_PRIOR_HOSTNAME}-config.js"
+	# nginx
+	rm -f "${EROOT%/}/etc/nginx/sites-enabled/${JVB_PRIOR_HOSTNAME}.conf"
+	rm -f "${EROOT%/}/etc/nginx/sites-available/${JVB_PRIOR_HOSTNAME}.conf"
+	# apache
+	rm -f "${EROOT%/}/etc/apache2/vhosts.d/${JVB_PRIOR_HOSTNAME}.conf"
+	rm -f "${EROOT%/}/etc/apache2/sites-available/${JVB_PRIOR_HOSTNAME}.conf"
+	# default keys
+	rm -f "${EROOT%/}/etc/jitsi/meet/${JVB_PRIOR_HOSTNAME}.key"
+	rm -f "${EROOT%/}/etc/jitsi/meet/${JVB_PRIOR_HOSTNAME}.crt"
+	# certbot
+	rm -f "${EROOT%/}/etc/jitsi/certbot/certbot.conf"
+fi
+
+local olddefault
+for olddefault in "${EROOT%/}/etc/apache2/vhosts.d"/00_default_*vhost.conf; do
+	einfo "Migrating ${olddefault##*/} to ${EROOT%/}/etc/apache2/sites-available/"
+	mv -f "${olddefault}" "${EROOT%/}/etc/apache2/sites-available/"
+done
+
+if ! [[ "${JM_SUPPLY_OWN_CRT}" =~ ^[Yy]$ ]]; then
+	# following logic from deb, we generate a self-signed certificate,
+	# filling most of the info fields with dummy values; unimportant
+	# as this will (should!) only be used for initial testing,
+	# migrating to Let's Encrypt (e.g.) certs if productionized
+	einfo "Writing new self-generated key to:"
+	einfo "  ${EROOT%/}${JM_WEB_CERT_KEY}"
+	einfo "and new matching certificate to:"
+	einfo "  ${EROOT%/}${JM_WEB_CERT_CRT}"
+	local HOST="$( (hostname -s 2>/dev/null; echo localhost) | head -n 1)"
+	local DOMAIN="$( (hostname -d 2>/dev/null; echo localdomain) | head -n 1)"
+	local SUBJ="/O=${DOMAIN}/OU=${HOST}/CN=${JVB_HOSTNAME}/emailAddress="
+	SUBJ+="emailAddress=webmaster@${HOST}.${DOMAIN}"
+	openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 \
+		-subj "${SUBJ}" \
+		-keyout "${JM_WEB_CERT_KEY}" \
+		-out "${JM_WEB_CERT_CRT}" &>/dev/null
+fi
+einfo "Writing new Jitsi Meet config to:"
+einfo "  ${EROOT%/}/etc/jitsi/meet/${JVB_HOSTNAME}-config.js"
+# removed nginx-specific multidomain stuff for now
+sed -e \
+'s/jitsi-meet.example.com/'"${JVB_HOSTNAME}"'/g ; '\
+	< "${EROOT%/}/usr/share/jitsi-meet-web-config/config.js" \
+	> "${EROOT%/}/etc/jitsi/meet/${JVB_HOSTNAME}-config.js"
+# create escaped versions of key and certificate paths
+local JM_WEB_CERT_KEY_ESC="${JM_WEB_CERT_KEY//\//\\/}"
+local JM_WEB_CERT_CRT_ESC="${JM_WEB_CERT_CRT//\//\\/}"
+einfo "Writing new nginx config to:"
+einfo "  ${EROOT%/}/etc/nginx/sites-available/${JVB_HOSTNAME}.conf"
+sed -e \
+'s/jitsi-meet.example.com/'"${JVB_HOSTNAME}"'/g ; '\
+'s/SSLCertificateKeyFile .*$/SSLCertificateKeyFile '"${JM_WEB_CERT_KEY_ESC}"'/g ; '\
+'s/SSLCertificateFile .*$/SSLCertificateFile '"${JM_WEB_CERT_CRT_ESC}"'/g '\
+	< "${EROOT%/}/usr/share/jitsi-meet-web-config/jitsi-meet.example" \
+	> "${EROOT%/}/etc/nginx/sites-available/${JVB_HOSTNAME}.conf"
+einfo "  and symlinking it into ${EROOT%/}/etc/nginx/sites-enabled/"
+ln -sf "../sites-available/${JVB_HOSTNAME}.conf" "${EROOT%/}/etc/nginx/sites-enabled/${JVB_HOSTNAME}.conf"
+# now the master config; needs to be modified to read sites-enabled,
+# remove default port 80 server etc.
+if [[ -s "${EROOT%/}/etc/nginx/nginx.conf" && ! -s "${EROOT%/}/etc/nginx/nginx.conf.bak" ]]; then
+	einfo "Backing up old ${EROOT%/}/etc/nginx/nginx.conf -> nginx.conf.bak"
+	cp "${EROOT%/}/etc/nginx/nginx.conf"{,.bak}
+	chmod 644 "${EROOT%/}/etc/nginx/nginx.conf.bak"
+fi
+einfo "Writing top-level nginx config file to:"
+einfo "  ${EROOT%/}/etc/nginx/nginx.conf"
+cat "${EROOT%/}/usr/share/jitsi-meet-web-config/nginx.conf.example" > \
+	"${EROOT%/}/etc/nginx/nginx.conf"
+chmod 644 "${EROOT%/}/etc/nginx/nginx.conf"
+einfo "Writing new apache config to:"
+einfo "  ${EROOT%/}/etc/nginx/sites-available/${JVB_HOSTNAME}.conf"
+sed -e \
+'s/jitsi-meet.example.com/'"${JVB_HOSTNAME}"'/g '\
+	< "${EROOT%/}/usr/share/jitsi-meet-web-config/jitsi-meet.example-apache" \
+	> "${EROOT%/}/etc/apache2/sites-available/${JVB_HOSTNAME}.conf"
+einfo "  and symlinking it into ${EROOT%/}/etc/apache2/vhosts.d/"
+ln -sf "../sites-available/${JVB_HOSTNAME}.conf" "${EROOT%/}/etc/apache2/vhosts.d/${JVB_HOSTNAME}.conf"
+# for apache, turn on proxying if installed
+if [[ -e "${EROOT%/}/etc/conf.d/apache2" ]]; then
+	if ! grep -Eq '^[[:space:]]*APACHE2_OPTS=.*-D[[:space:]]+PROXY' \
+		"${EROOT%/}/etc/conf.d/apache2"; then
+		# set the option
+		einfo "Turning on -\"-D PROXY\" in \"${EROOT%/}/etc/conf.d/apache2\"" 
+		sed -i 's/^\([[:space:]]*APACHE2_OPTS="[^"]*\)"/\1 -D PROXY"/' \
+			"${EROOT%/}/etc/conf.d/apache2" 
+	fi
+else
+	ewarn "You don't appear to have www-servers/apache installed"
+	ewarn "If you do install and want to use it, make sure that"
+	ewarn "\"-D PROXY\" is set in \"${EROOT%/}/etc/conf.d/apache2\""
+	ewarn "(as otherwise BOSH will be unavailable)."
+fi
+if [[ ${LE_HOSTNAME} ]]; then
+	einfo "Writing new certbot config, for \"${LE_HOSTNAME}\", to:"
+	einfo "  ${EROOT%/}/etc/jitsi/certbot/certbot.conf"
+	sed -e \
+'s/webmaster@jitsi-meet.example.com/'"${LE_EMAIL}"'/g ; '\
+'s/jitsi-meet.example.com/'"${LE_HOSTNAME}"'/g ; '\
+'s#/var/lib/jitsi-meet-web-config#'"${LE_WEBROOT}"'#g ; '\
+'s/"y"/'"${LE_ENABLE_AUTO}"'/g '\
+	< "${EROOT%/}/usr/share/jitsi-meet-web-config/certbot.conf" \
+	> "${EROOT%/}/etc/jitsi/certbot/certbot.conf"
+fi
+

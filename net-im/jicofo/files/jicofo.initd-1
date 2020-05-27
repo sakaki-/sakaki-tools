@@ -1,0 +1,36 @@
+#!/sbin/openrc-run
+# Copyright 2020 sakaki <sakaki@deciban.com>
+# Distributed under the terms of the GNU General Public License v2
+
+description="JItsi COnference FOcus server (media session manager)"
+
+# logs to /var/log/jitsi/jicofo.log
+
+pidfile="/var/run/jicofo/${RC_SVCNAME}.pid"
+# launcher script below will work on OpenRC also
+command="/usr/bin/jicofo-systemd.sh"
+command_user="jicofo:jitsi"
+command_background=true
+
+depend() {
+	need net
+	want jabber-server
+	provide jicofo-server
+}
+
+start_pre() {
+	mkdir -m 770 -p /var/run/${RC_SVCNAME}
+	chown "${command_user}" /var/run/${RC_SVCNAME}
+	# jicofo uses port 8888 for healthcheck, but this
+	# is often used by other services, e.g., pigpiod, so check & warn
+	# if any conflict found (it will still run though)
+	local P="$(lsof -i :8888 2>/dev/null)"
+	if grep -qw TCP <<<"${P}"; then
+		ewarn "Port 8888 already in use on some interface(s)!"
+		ewarn "The ${RC_SVCNAME} service may be degraded. Details:"
+		ewarn "${P}"
+		ewarn "Please check for conflicting services (pigpiod etc)"
+	fi
+	return 0
+}
+

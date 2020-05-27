@@ -1,0 +1,134 @@
+# /etc/jitsi/config-updaters.d/20-jitsi-meet-prosody
+#
+# Sourced into pkg_config of jitsi-meet-master-config.
+# This script fragment uses the master configuration
+# variables from /etc/jitsi/jitsi-meet-master-config
+# (which are all set up already when this fragment is
+# sourced), configures a new file in /etc/jabber/conf.avail
+# with appropriate name and variable substitutions, symlinks
+# this into /etc/jabber/conf.d (removing any prior symlink)
+# and performs a number of additional bring-up tasks. Note
+# that any prior config, as denoted in ${JVB_PRIOR_HOSTNAME},
+# will be removed when this fragment is sourced.
+#
+# Flow adapted with thanks from the upstream deb postinst.
+#
+# Copyright (c) 2020 sakaki <sakaki@deciban.com>
+# License: GPL v3+
+# NO WARRANTY
+
+if [[ "${JVB_PRIOR_HOSTNAME}" != "${JVB_HOSTNAME}" && ! -z "${JVB_PRIOR_HOSTNAME}" ]]; then
+	ewarn "Removing prior setup for ${JVB_PRIOR_HOSTNAME}"
+	rm -f "${EROOT%/}/etc/jabber/conf.avail/${JVB_PRIOR_HOSTNAME}.cfg.lua"
+	rm -f "${EROOT%/}/etc/jabber/conf.d/${JVB_PRIOR_HOSTNAME}.cfg.lua"
+	# clean up generated certificates too
+	rm -f "${EROOT%/}/etc/jabber/certs/${JVB_PRIOR_HOSTNAME}"{.key,.cnf,.crt}
+	rm -f "${EROOT%/}/etc/jabber/certs/auth.${JVB_PRIOR_HOSTNAME}"{.key,.cnf,.crt}
+	rm -rf "${EROOT%/}/usr/local/share/ca-certificates/auth.${JVB_PRIOR_HOSTNAME}.crt"
+	update-ca-certificates -f &>/dev/null || \
+		ewarn "Failed to update certificates"
+	rm -rf "${EROOT%/}/var/spool/jabber/auth.${JVB_PRIOR_HOSTNAME}"{.key,.cnf,.crt}
+	rm -rf "${EROOT%/}/var/spool/jabber/${JVB_PRIOR_HOSTNAME}"{.key,.cnf,.crt}
+	# clean created jabber users too
+        rm -rf "${EROOT%/}/var/spool/jabber/auth%2e${JVB_PRIOR_HOSTNAME//\./%2e}"
+	# localhost alias removal
+	if [[ "${JVB_PRIOR_HOSTNAME}" != "localhost" ]]; then
+		sed -i 's/\([[:space:]]*127\.0\.0\.1.*\)\([[:space:]]\)'"${JVB_PRIOR_HOSTNAME}"\
+'\([[:space:]]\|$\)/\1\2/g; s/[[:space:]]*$//g' "${EROOT%/}/etc/hosts"
+		sed -i 's/\([[:space:]]*::1.*\)\([[:space:]]\)'"${JVB_PRIOR_HOSTNAME}"\
+'\([[:space:]]\|$\)/\1\2/g; s/[[:space:]]*$//g' "${EROOT%/}/etc/hosts"
+	fi
+fi
+
+einfo "Writing new config to:"
+einfo "  ${EROOT%/}/etc/jabber/conf.avail/${JVB_HOSTNAME}.cfg.lua"
+sed -e \
+'s/auth\.jitmeet\.example\.com/'"${JICOFO_AUTH_DOMAIN}"'/g ; '\
+'s/{ 5347 }/'"{ ${JVB_PORT} }"'/g ; '\
+'s/jitmeet\.example\.com/'"${JVB_HOSTNAME}"'/g ; '\
+'s/focusUser@/'"${JICOFO_AUTH_USER}@"'/g ; '\
+'s/jvbSecret/'"${JVB_SECRET}"'/g ; '\
+'s/focusSecret/'"${JICOFO_SECRET}"'/g ; '\
+'s/__turnSecret__/'"${TURN_SECRET}"'/g ; '\
+'s#/etc/prosody/#/etc/jabber/#g '\
+	< "${EROOT%/}/usr/share/jitsi-meet-prosody/prosody.cfg.lua-jvb.example" \
+	> "${EROOT%/}/etc/jabber/conf.avail/${JVB_HOSTNAME}.cfg.lua"
+einfo "Removing any prior /etc/jabber/conf.d/ symlinks"
+find "${EROOT%/}/etc/jabber/conf.d" -mindepth 1 -maxdepth 1 -type l -delete
+einfo "Symlinking new ${JVB_HOSTNAME}.cfg.lua into ${EROOT%/}/etc/jabber/conf.d/"
+ln -s "../conf.avail/${JVB_HOSTNAME}.cfg.lua" "${EROOT%/}/etc/jabber/conf.d/${JVB_HOSTNAME}.cfg.lua"
+
+# do some one-off updates for the specified domain, so
+# system works on localhost, out of the box
+if [[ -e "${EROOT%/}/etc/jabber/certs/${JVB_HOSTNAME}.crt" ]]; then
+	ewarn "Certificate for ${JVB_HOSTNAME} already exists"
+	ewarn "Skipping generation"
+else
+	einfo "Generating certificate for ${JVB_HOSTNAME}"
+	rm -f "/var/spool/jabber/${JVB_HOSTNAME}".{key,crt,cnf}
+	# prosody server itself can be offline for the following
+	echo | prosodyctl cert generate "${JVB_HOSTNAME}" &>/dev/null || \
+		die "Failed to generate certificate"
+	einfo "Adding ${JVB_HOSTNAME}{.key,.crt} to prosody certs dir"
+	ln -sf "/var/spool/jabber/${JVB_HOSTNAME}.key" "${EROOT%/}/etc/jabber/certs/${JVB_HOSTNAME}.key"
+    	ln -sf "/var/spool/jabber/${JVB_HOSTNAME}.crt" "${EROOT%/}/etc/jabber/certs/${JVB_HOSTNAME}.crt"
+fi
+if [[ -e "${EROOT%/}/etc/jabber/certs/${JICOFO_AUTH_DOMAIN}.crt" ]]; then
+	ewarn "Certificate for ${JICOFO_AUTH_DOMAIN} already exists"
+	ewarn "Skipping generation"
+else
+	einfo "Generating certificate for ${JICOFO_AUTH_DOMAIN}"
+	rm -f "${EROOT%/}/var/spool/jabber/${JICOFO_AUTH_DOMAIN}".{key,crt,cnf}
+	# prosody server itself can be offline for the following
+	echo | prosodyctl cert generate "${JICOFO_AUTH_DOMAIN}" &>/dev/null || \
+		die "Failed to generate certificate"
+	einfo "Adding ${JICOFO_AUTH_DOMAIN}{.key,.crt} to prosody certs dir"
+	einfo "and ${JICOFO_AUTH_DOMAIN}.crt to trusted certificates dir,"
+	einfo "and updating certificates"
+	ln -sf "/var/spool/jabber/${JICOFO_AUTH_DOMAIN}.key" "${EROOT%/}/etc/jabber/certs/${JICOFO_AUTH_DOMAIN}.key"
+	ln -sf "/var/spool/jabber/${JICOFO_AUTH_DOMAIN}.crt" "${EROOT%/}/etc/jabber/certs/${JICOFO_AUTH_DOMAIN}.crt"
+	ln -sf "/var/spool/jabber/${JICOFO_AUTH_DOMAIN}.crt" "${EROOT%/}/usr/local/share/ca-certificates/${JICOFO_AUTH_DOMAIN}.crt"
+	update-ca-certificates -f &>/dev/null || \
+		ewarn "Failed to update certificates"
+fi
+einfo "Registering \"${JICOFO_AUTH_USER}\" user (admin)"
+# prosody server itself can be offline for the following
+prosodyctl register "${JICOFO_AUTH_USER}" "${JICOFO_AUTH_DOMAIN}" "${JICOFO_AUTH_PASSWORD}" || \
+	die "Failed to register user ${JICOFO_AUTH_USER}"
+einfo "Registering \"${JICOFO_CONVENE_USER}\" user (new meeting convener)"
+prosodyctl register "${JICOFO_CONVENE_USER}" "${JVB_HOSTNAME}" "${JICOFO_CONVENE_PASSWORD}" || \
+	die "Failed to register user ${JICOFO_CONVENE_USER}"
+einfo "Registering \"${JVB_AUTH_USER}\" user (admin)"
+prosodyctl register "${JVB_AUTH_USER}" "${JICOFO_AUTH_DOMAIN}" "${JVB_AUTH_PASSWORD}" || \
+	die "Failed to register user ${JVB_AUTH_USER}"
+if [[ "${JVB_HOSTNAME}" != "localhost" && "${JVB_HOSTNAME_LOCALHOST_ALIAS}" =~ ^[Yy]$ ]]; then
+	if ! grep -q "${JVB_HOSTNAME}" /etc/hosts 2>/dev/null; then
+		einfo "Adding ${JVB_HOSTNAME} as a localhost alias"
+		sed -i '/^127.0.0.1[[:space:]]/ s/$/ '"${JVB_HOSTNAME}"'/' /etc/hosts
+		sed -i '/^::1[[:space:]]/ s/$/ '"${JVB_HOSTNAME}"'/' /etc/hosts
+	else
+		# aliased to localhost addresses?
+		if ! grep -qE "^[[:space:]]*127\.0\.0\.1[[:space:]]+([^[:space:]]+[[:space:]]+)*${JVB_HOSTNAME}([[:space:]]|$)" 2>/dev/null /etc/hosts || \
+			! grep -qE "^[[:space:]]*::1[[:space:]]+([^[:space:]]+[[:space:]]+)*${JVB_HOSTNAME}([[:space:]]|$)" 2>/dev/null /etc/hosts; then
+			ewarn ""${JVB_HOSTNAME}" already present in /etc/hosts, but"
+			ewarn "not for both IPv4 and IPv6 loopback addresses"
+			ewarn "Your system may not operate correctly"
+		else
+			ewarn "You seem to already have "${JVB_HOSTNAME}" aliased to localhost"
+		fi
+	fi
+fi
+# conform /etc/hostname if requested
+if [[ "${JVB_HOSTNAME}" != "localhost" && "${JVB_CONFORM_ETC_HOSTNAME}" =~ ^[Yy]$ ]]; then
+	einfo "Ensuring \"${EROOT%/}/etc/hostname\" contains ${JVB_HOSTNAME}"
+	local PRIOR_ETC_HOSTNAME=""
+	[[ -s "${EROOT%/}/etc/hostname" ]] && PRIOR_ETC_HOSTNAME="$(cat "${EROOT%/}/etc/hostname")"
+	echo "${JVB_HOSTNAME}" > "${EROOT%/}/etc/hostname"
+	if [[ "${JVB_HOSTNAME}" != "${PRIOR_ETC_HOSTNAME}" ]]; then
+		ewarn "The contents of \"${EROOT%/}/etc/hostname\" have changed"
+		ewarn "You may need to reboot your system to ensure changes"
+		ewarn "are correctly picked up, before start Jitsi meet"
+		REBOOT_REQUIRED=1
+	fi
+fi
+

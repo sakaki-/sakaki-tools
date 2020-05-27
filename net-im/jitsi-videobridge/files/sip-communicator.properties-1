@@ -1,0 +1,19 @@
+# sip-communicator.properties
+
+org.ice4j.ice.harvest.DISABLE_AWS_HARVESTER=true
+org.ice4j.ice.harvest.STUN_MAPPING_HARVESTER_ADDRESSES=meet-jit-si-turnrelay.jitsi.net:443
+
+org.jitsi.videobridge.xmpp.user.shard.HOSTNAME=localhost
+org.jitsi.videobridge.xmpp.user.shard.DOMAIN=auth.jitsi.example.com
+org.jitsi.videobridge.xmpp.user.shard.USERNAME=jvb
+org.jitsi.videobridge.xmpp.user.shard.PASSWORD=changeme555
+org.jitsi.videobridge.xmpp.user.shard.MUC_JIDS=JvbBrewery@internal.auth.jitsi.example.com
+org.jitsi.videobridge.xmpp.user.shard.MUC_NICKNAME=bedabb1e-be11-b01d-bead-5ea1edca11ed
+org.jitsi.videobridge.xmpp.user.shard.DISABLE_CERTIFICATE_VERIFICATION=true
+
+org.jitsi.videobridge.ENABLE_STATISTICS=true
+org.jitsi.videobridge.STATISTICS_TRANSPORT=muc
+org.jitsi.videobridge.STATISTICS_INTERVAL=5000
+
+org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS=192.168.1.1
+org.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS=82.221.139.201

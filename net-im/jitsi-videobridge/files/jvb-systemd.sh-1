@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Prepares variables for /usr/bin/jvb.sh, and then calls it,
+# thereby mimicking the init script setup on OpenRC.
+#
+# Copyright (c) 2020 sakaki <sakaki@deciban.com>
+# License: GPL v3+
+# NO WARRANTY
+
+# pull in OpenRC configuration for this service
+# (in turn, pulls in /etc/jitsi/videobridge/config.d/*.conf)
+source /etc/conf.d/jitsi-videobridge
+
+# now apply default values for some conf.d variables
+JVB_HOST="${JVB_HOST:-localhost}"
+JVB_HOSTNAME="${JVB_HOSTNAME:-jitsi.example.com}"
+JVB_PORT="${JVB_PORT:-5347}"
+JVB_SECRET="${JVB_SECRET:-changeme111}"
+JVB_OPTS="${JVB_OPTS:---apis=rest,xmpp}"
+JVB_USE_AUTHBIND="${JVB_USE_AUTHBIND:-no}"
+LOGFILE="${LOGFILE:-/var/log/jitsi/jvb.log}"
+export VIDEOBRIDGE_MAX_MEMORY="${JVB_MAX_MEMORY:-1024m}"
+export JAVA_SYS_PROPS="${JAVA_SYS_PROPS:--Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION=/etc/jitsi\
+ -Dnet.java.sip.communicator.SC_HOME_DIR_NAME=videobridge\
+ -Dnet.java.sip.communicator.SC_LOG_DIR_LOCATION=/var/log/jitsi\
+ -Djava.util.logging.config.file=/etc/jitsi/videobridge/logging.properties}"
+
+command="/usr/bin/jvb.sh"
+command_args="--host=${JVB_HOST} --domain=${JVB_HOSTNAME} --port=${JVB_PORT} --secret=${JVB_SECRET} ${JVB_OPTS}"
+if [[ "${JVB_USE_AUTHBIND}" == "yes" ]]; then
+	command_args="--deep /bin/bash -c '${command} ${command_args}'"
+	command="/usr/bin/authbind"
+fi
+
+exec ${command} ${command_args} < /dev/null >> "${LOGFILE}" 2>&1
+

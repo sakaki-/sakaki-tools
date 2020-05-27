@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+# Prepares variables for /usr/bin/jicofo.sh, and then calls it,
+# thereby mimicking the init script setup on OpenRC.
+#
+# Copyright (c) 2020 sakaki <sakaki@deciban.com>
+# License: GPL v3+
+# NO WARRANTY
+
+# pull in OpenRC configuration for this service
+# (in turn, pulls in /etc/jitsi/jicofo/config.d/*.conf)
+source /etc/conf.d/jicofo
+
+# now apply default values for some conf.d variables
+JICOFO_HOST="${JICOFO_HOST:-localhost}"
+JICOFO_HOSTNAME="${JICOFO_HOSTNAME:-jitsi.example.com}"
+JICOFO_PORT="${JICOFO_PORT:-5347}"
+JICOFO_SECRET="${JICOFO_SECRET:-changeme222}"
+JICOFO_AUTH_USER="${JICOFO_AUTH_USER:-focus}"
+JICOFO_AUTH_DOMAIN="${JICOFO_AUTH_DOMAIN:-auth.${JICOFO_HOSTNAME}}"
+JICOFO_AUTH_PASSWORD="${JICOFO_AUTH_PASSWORD:-changeme333}"
+JICOFO_OPTS="${JICOFO_OPTS:-}"
+LOGFILE="${LOGFILE:-/var/log/jitsi/jicofo.log}"
+export JAVA_SYS_PROPS="${JAVA_SYS_PROPS:--Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION=/etc/jitsi\
+ -Dnet.java.sip.communicator.SC_HOME_DIR_NAME=jicofo\
+ -Dnet.java.sip.communicator.SC_LOG_DIR_LOCATION=/var/log/jitsi\
+ -Djava.util.logging.config.file=/etc/jitsi/jicofo/logging.properties}"
+
+command="/usr/bin/jicofo.sh"
+command_args="--host=${JICOFO_HOST} --domain=${JICOFO_HOSTNAME} --port=${JICOFO_PORT}\
+ --secret=${JICOFO_SECRET} --user_name=${JICOFO_AUTH_USER} --user_domain=${JICOFO_AUTH_DOMAIN}\
+ --user_password=${JICOFO_AUTH_PASSWORD} ${JICOFO_OPTS}"
+
+exec ${command} ${command_args} < /dev/null >> "${LOGFILE}" 2>&1
+

@@ -1,0 +1,20 @@
+[Unit]
+Description=Jitsi Meet videoconferencing system, server set
+Wants=prosody.service coturn.service jitsi-videobridge.service jicofo.service nginx.service jitsi-certbot.service jitsi-certbot.timer
+After=network.target prosody.service coturn.service jitsi-videobridge.service jicofo.service nginx.service jitsi-certbot.service
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# start and stop our full set of revdeps asynchronously
+# redundant on first start, but not on restarts
+# we leave the jitsi-certbot.timer running out of band though, and don't
+# need to stop jitsi-certbot.service, as it is oneshot
+ExecStart=/usr/bin/systemd-run --no-block /bin/systemctl start prosody.service coturn.service jitsi-videobridge.service jicofo.service nginx.service jitsi-certbot.service
+ExecStartPost=/usr/bin/sleep 5
+ExecStartPost=/usr/sbin/run-certbot.sh
+ExecStartPost=/usr/sbin/jitsi-meet-server-postcheck.sh
+ExecStop=/usr/bin/systemd-run --no-block /bin/systemctl stop prosody.service coturn.service jitsi-videobridge.service jicofo.service nginx.service
+ExecStopPost=/usr/bin/sleep 5
+
+[Install]
+WantedBy=multi-user.target

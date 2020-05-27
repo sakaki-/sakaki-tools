@@ -1,0 +1,10 @@
+[Unit]
+Description=Run automated TLS certificate update check daily
+
+[Timer]
+OnCalendar=daily
+RandomizedDelaySec=8191 s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,65 @@
+--- a/doc/debian/jitsi-meet/jitsi-meet.example-apache
++++ b/doc/debian/jitsi-meet/jitsi-meet.example-apache
+@@ -1,16 +1,31 @@
++Listen 80
++Listen 443
++
++ServerName jitsi-meet.example.com
+ 
+ <VirtualHost *:80>
+     ServerName jitsi-meet.example.com
+-    Redirect permanent / https://jitsi-meet.example.com/
+     RewriteEngine On
++    RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge(/[A-Za-z0-9_-]*)?$
+     RewriteCond %{HTTPS} off
+     RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
++
++    DocumentRoot "/var/lib/jitsi-meet-web-config"
++    <Directory "/var/lib/jitsi-meet-web-config/.well-known/acme-challenge">
++      Require all granted
++    </Directory>
+ </VirtualHost>
+ 
+ <VirtualHost *:443>
+ 
+   ServerName jitsi-meet.example.com
+ 
++  ErrorLog /var/log/apache2/ssl_error_log
++
++  <IfModule log_config_module>
++    TransferLog /var/log/apache2/ssl_access_log
++  </IfModule>
++
+   SSLProtocol TLSv1 TLSv1.1 TLSv1.2
+   SSLEngine on
+   SSLProxyEngine on
+@@ -25,8 +40,7 @@
+     Options Indexes MultiViews Includes FollowSymLinks
+     AddOutputFilter Includes html
+     AllowOverride All
+-    Order allow,deny
+-    Allow from all
++    Require all granted
+   </Directory>
+ 
+   ErrorDocument 404 /static/404.html
+@@ -41,9 +55,15 @@
+     Require all granted
+   </Location>
+ 
+-  ProxyPreserveHost on
+-  ProxyPass /http-bind http://localhost:5280/http-bind/
+-  ProxyPassReverse /http-bind http://localhost:5280/http-bind/
++  <IfDefine PROXY>
++    <IfModule proxy_module>
++      <IfModule proxy_http_module>
++        ProxyPreserveHost on
++        ProxyPass /http-bind http://localhost:5280/http-bind/
++        ProxyPassReverse /http-bind http://localhost:5280/http-bind/
++      </IfModule>
++    </IfModule>
++  </IfDefine>
+ 
+   RewriteEngine on
+   RewriteRule ^/([a-zA-Z0-9]+)$ /index.html
+

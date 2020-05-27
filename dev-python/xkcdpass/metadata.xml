@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<maintainer>
+				<email>steventtobin@gmail.com</email>
+				<name>Steven Tobin</name>
+		</maintainer>
+		<remote-id type="github">redacted/XKCD-password-generator</remote-id>
+		<bugs-to>mailto:steventtobin@gmail.com</bugs-to>
+	</upstream>
+	<maintainer type="person">
+		<email>sakaki@deciban.com</email>
+		<name>sakaki</name>
+	</maintainer>
+	<longdescription>
+		A flexible and scriptable password generator which generates
+		strong passphrases, inspired by XKCD 936 (http://xkcd.com/936/)
+
+		E.g.: correct-horse-battery-staple ^-^
+	</longdescription>
+</pkgmetadata>
+

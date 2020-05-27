@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<upstream>
+		<maintainer>
+				<email>dev@jitsi.org</email>
+				<name>Jitsi Team</name>
+		</maintainer>
+		<remote-id type="github">jitsi/jitsi-meet</remote-id>
+		<bugs-to>mailto:dev@jitsi.org</bugs-to>
+	</upstream>
+	<maintainer type="person">
+		<email>sakaki@deciban.com</email>
+		<name>sakaki</name>
+	</maintainer>
+	<longdescription>
+		This package configures the net-im/coturn server to
+		work with Jitsi Meet.
+
+		TURN servers allow WebRTC applications to relay traffic
+		between peers for which a direct connection is impossible
+		(due to symmetric NAT, firewalls etc.).
+
+		By default the turnserver will listen on port 4446 (STUN
+		will also be provided on this port). If the USE flag
+		port-443-mux is unset, it will also listen on port 4445
+		for TLS; if this flag is set however, it will multiplex on
+		port 443 with the webserver (NB: while this will allow use
+		of the server by more restricted clients, it is currently
+		only supported upstream with www-servers/nginx).
+	</longdescription>
+	<use>
+		<flag name='port-443-mux'>Multiplex with the webserver on port 443. Currently requires nginx.</flag>
+	</use>
+</pkgmetadata>
+

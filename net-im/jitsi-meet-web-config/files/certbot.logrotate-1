@@ -1,0 +1,10 @@
+/var/log/jitsi/certbot.log {
+  daily
+  missingok
+  rotate 24
+  compress
+  delaycompress
+  notifempty
+  copytruncate
+}
+

@@ -1,0 +1,34 @@
+# configuration options for the JItsi COnference FOcus server,
+# on XMPP domain jitsi.example.com
+
+# the hostname of the XMPP server (i.e., prosody)
+JICOFO_HOST="localhost"
+
+# the XMPP domain (NB, internal; can be distinct
+# from webserver FQDN, but is usually the same as it for a
+# single-box install)
+JICOFO_HOSTNAME="jitsi.example.com"
+
+# the port of the XMPP server
+JICOFO_PORT="5347"
+
+# the shared secret used to authenticate to the XMPP server
+JICOFO_SECRET="changeme222"
+
+# user authorized to control server
+JICOFO_AUTH_USER="focus"
+
+# name of XMPP domain used by the focus user to login
+# (NB, internal; no DNS entry required)
+JICOFO_AUTH_DOMAIN="auth.jitsi.example.com"
+
+# the password used by focus XMPP user to login
+JICOFO_AUTH_PASSWORD="changeme333"
+
+# The authenticated user who is allowed to start
+# (convene) new meetings
+JICOFO_CONVENE_USER="conveneuser"
+
+# The secret used to connect to the XMPP server as the
+# new meeting convener
+JICOFO_CONVENE_PASSWORD="change-me"

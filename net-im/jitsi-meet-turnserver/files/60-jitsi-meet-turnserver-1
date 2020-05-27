@@ -1,0 +1,152 @@
+# /etc/jitsi/config-updaters.d/60-jitsi-meet-turnserver
+#
+# Sourced into pkg_config of jitsi-meet-master-config.
+# This script fragment uses the master configuration
+# variables from /etc/jitsi/jitsi-meet-master-config
+# (which are all set up already when this fragment is
+# sourced), and sets up /etc/turnserver.conf, modifying
+# the current nginx configuration too if necessary. Note
+# that any prior config, as denoted in ${JVB_PRIOR_HOSTNAME},
+# will be removed when this fragment is sourced.
+#
+# Flow adapted with thanks from the upstream deb postinst.
+#
+# Copyright (c) 2020 sakaki <sakaki@deciban.com>
+# License: GPL v3+
+# NO WARRANTY
+
+readonly _TURN_CONFIG="${EROOT%/}/etc/turnserver.conf"
+readonly _TURN_CONFIG_TEMPLATE="${EROOT%/}/usr/share/jitsi-meet-turnserver/turnserver.conf"
+readonly _NGINX_CONFIG="${EROOT%/}/etc/nginx/sites-available/${JVB_HOSTNAME}.conf"
+readonly _JITSI_MEET_CONFIG="${EROOT%/}/etc/jitsi/meet/${JVB_HOSTNAME}-config.js"
+readonly _NGINX_SITES_ENABLED="${EROOT%/}/etc/nginx/sites-enabled"
+readonly _NGINX_MASTER_CONFIG="${EROOT%/}/etc/nginx/nginx.conf"
+readonly _NGINX_CONFIG_ENABLED="${_NGINX_SITES_ENABLED}/${JVB_HOSTNAME}.conf"
+readonly _NGINX_STREAM_CONFIG="${EROOT%/}/etc/nginx/modules-enabled/60-jitsi-meet.conf"
+readonly _NGINX_STREAM_CONFIG_LINK_TEMPLATE="/usr/share/jitsi-meet-turnserver/jitsi-meet.conf" # no prefix, symlink
+readonly _NGINX_STREAM_CONFIG_TEMPLATE="${EROOT%/}${_NGINX_STREAM_CONFIG_LINK_TEMPLATE}"
+readonly _PROSODY_HOST_CONFIG="${EROOT%/}/etc/jabber/conf.avail/${JVB_HOSTNAME}.cfg.lua"
+
+if [[ "${JVB_PRIOR_HOSTNAME}" != "${JVB_HOSTNAME}" && ! -z "${JVB_PRIOR_HOSTNAME}" ]]; then
+	ewarn "Removing prior setup for ${JVB_PRIOR_HOSTNAME}"
+        rm -f "${_NGINX_STREAM_CONFIG}"
+	rm -f "${_TURN_CONFIG}"
+fi
+
+# can't access the USE flag directly, in a different package,
+# so infer it
+local nginx_multiplexing=false
+[[ -s ${_NGINX_STREAM_CONFIG_TEMPLATE} ]] && nginx_multiplexing=true
+
+if ${nginx_multiplexing}; then
+	# check existing enabled nginx sites for use of port 443;
+	# any hits (that aren't us!), we disable multiplexing anyway
+	local site
+	for site in "${_NGINX_SITES_ENABLED}"/*; do
+		[[ ${site##*/} == "${JVB_HOSTNAME}.conf" ]] && continue # ours
+		# we have an alien config - is it listening on 443?
+		if grep -Eq '^[[:space:]]*listen[[:space:]]+443[;[:space:]]' "${site}"; then
+			ewarn "Turning multiplexing OFF - another nginx site is using port 443!"
+			nginx_multiplexing=false
+			break
+		fi
+	done
+fi
+# existing, alien turn config? if so back it up
+if [[ -f "${_TURN_CONFIG}" ]] &&
+	! grep -q "jitsi-meet coturn config" "${_TURN_CONFIG}"; then
+	ewarn "Backing up existing coturn config to \"${_TURN_CONFIG}.bak\""
+	mv "${_TURN_CONFIG}"{,.bak}
+fi
+
+# create escaped versions of key and certificate paths
+local JM_WEB_CERT_KEY_ESC="${JM_WEB_CERT_KEY//\//\\/}"
+local JM_WEB_CERT_CRT_ESC="${JM_WEB_CERT_CRT//\//\\/}"
+local turn_port=4445
+${nginx_multiplexing} && turn_port=443
+
+einfo "Writing new turnserver config to:"
+einfo "  ${_TURN_CONFIG}"
+sed -e \
+'s/jitsi-meet.example.com/'"${JVB_HOSTNAME}"'/g ; '\
+'s/__turnSecret__/'"${TURN_SECRET}"'/g ; '\
+'s/__external_ip_address__/'"${JVB_EXTERNAL_IP}"'/g ; '\
+'s#/etc/jitsi/meet/jitsi-meet.example.com.crt#'"${JM_WEB_CERT_KEY_ESC}"'#g ; '\
+'s#/etc/jitsi/meet/jitsi-meet.example.com.key#'"${JM_WEB_CERT_CRT_ESC}"'#g '\
+	< "${_TURN_CONFIG_TEMPLATE}" \
+	> "${_TURN_CONFIG}"
+
+if [[ -e "${_PROSODY_HOST_CONFIG}" ]]; then
+	if ${nginx_multiplexing}; then
+		einfo "Setting turnserver port to 443 in prosody config, in:"
+		einfo "  ${_PROSODY_HOST_CONFIG}"
+		sed -i 's#"4445"#"443"#' "${_PROSODY_HOST_CONFIG}"
+	else
+		einfo "Setting turnserver port to 4445 in prosody config, in:"
+		einfo "  ${_PROSODY_HOST_CONFIG}"
+		sed -i 's#"443"#"4445"#' "${_PROSODY_HOST_CONFIG}"
+	fi
+else
+	ewarn "No prosidy configuration file found in:"
+	ewarn "  ${_PROSODY_HOST_CONFIG}"
+	ewarn "Your system may not operate correctly!"
+fi
+
+# make sure nginx looks at /etc/nginx/modules-enabled, iff
+# we are multiplexing
+if ${nginx_multiplexing}; then
+	if [[ -e "${_NGINX_MASTER_CONFIG}" ]]; then
+		# the fix may already be in
+		if ! grep -q '^include /etc/nginx/modules-enabled/\*\.conf;' "${_NGINX_MASTER_CONFIG}"; then
+			einfo "Turning on use of modules-enabled for nginx, in:"
+			einfo "  ${_NGINX_MASTER_CONFIG}"
+			sed -i 's@\([^#]*\)worker_processes\(.*\)$@\1worker_processes\2'\
+'\ninclude /etc/nginx/modules-enabled/*.conf;@' "${_NGINX_MASTER_CONFIG}"
+		fi
+	else
+		ewarn "No nginx master configuration file found in:"
+		ewarn "  ${_NGINX_MASTER_CONFIG}"
+		ewarn "Your system may not operate correctly!"
+	fi
+fi
+
+if [[ -e "${_NGINX_CONFIG}" ]]; then
+	if ${nginx_multiplexing}; then
+		einfo "Multiplexing: making nginx listen for https on port 4444, in:"
+		einfo "  ${_NGINX_CONFIG}"
+		sed -i 's/listen 443 ssl/listen 4444 ssl http2/g ; '\
+'s/listen \[\:\:\]\:443 ssl/listen \[\:\:\]\:4444 ssl http2/g' \
+"${_NGINX_CONFIG}"
+	else
+		einfo "Not multiplexing: making nginx listen for https on port 443, in:"
+		einfo "  ${_NGINX_CONFIG}"
+				sed -i 's/listen 4444 ssl http2/listen 443 ssl/g ; '\
+'s/listen \[\:\:\]\:4444 ssl http2/listen \[\:\:\]\:443 ssl/g' \
+"${_NGINX_CONFIG}"
+	fi
+else
+	ewarn "No nginx configuration file found in:"
+	ewarn "  ${_NGINX_CONFIG}"
+	ewarn "Your system may not operate correctly!"
+fi
+
+if ${nginx_multiplexing}; then
+	einfo "Adding multiplexer module for turnserver to nginx, in:"
+	einfo "  ${_NGINX_STREAM_CONFIG}"
+	# symbolic link, no prefix
+	ln -sf "${_NGINX_STREAM_CONFIG_LINK_TEMPLATE}" \
+		"${_NGINX_STREAM_CONFIG}"
+else
+	rm -f "${_NGINX_STREAM_CONFIG}"
+fi
+
+# finally, enable turn server in config.js
+if [[ -f "${_JITSI_MEET_CONFIG}" ]] ; then
+	einfo "Activating turnserver in:"
+	einfo "  ${_JITSI_MEET_CONFIG}"
+	sed -i \
+'s#// useStunTurn: true#useStunTurn: true#g ; '\
+'s#// { urls: '"'"'stun:#{ urls: '"'"'stun:#g ; '\
+"s/:4446/:${turn_port}/g"\
+		"${_JITSI_MEET_CONFIG}"
+fi

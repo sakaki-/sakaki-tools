@@ -1,0 +1,44 @@
+--- a/doc/debian/jitsi-meet-prosody/prosody.cfg.lua-jvb.example
++++ b/doc/debian/jitsi-meet-prosody/prosody.cfg.lua-jvb.example
+@@ -8,7 +8,7 @@
+ turncredentials = {
+   { type = "stun", host = "jitmeet.example.com", port = "4446" },
+   { type = "turn", host = "jitmeet.example.com", port = "4446", transport = "udp" },
+-  { type = "turns", host = "jitmeet.example.com", port = "443", transport = "tcp" }
++  { type = "turns", host = "jitmeet.example.com", port = "4445", transport = "tcp" }
+ };
+ 
+ cross_domain_bosh = false;
+@@ -16,7 +16,7 @@
+ 
+ VirtualHost "jitmeet.example.com"
+         -- enabled = false -- Remove this line to enable this host
+-        authentication = "anonymous"
++        authentication = "internal_plain"
+         -- Properties below are modified by jitsi-meet-tokens package config
+         -- and authentication above is switched to "token"
+         --app_id="example_app_id"
+@@ -64,6 +64,10 @@
+     muc_room_default_public_jids = true
+ 
+ VirtualHost "auth.jitmeet.example.com"
++    ssl = {
++            key = "/etc/prosody/certs/auth.jitmeet.example.com.key";
++            certificate = "/etc/prosody/certs/auth.jitmeet.example.com.crt";
++    }
+     authentication = "internal_plain"
+ 
+ Component "focus.jitmeet.example.com"
+@@ -74,3 +78,11 @@
+ 
+ Component "conferenceduration.jitmeet.example.com" "conference_duration_component"
+     muc_component = "conference.jitmeet.example.com"
++
++Component "jitsi-videobridge.jitmeet.example.com"
++    component_secret = "jvbSecret"
++
++VirtualHost "guest.jitmeet.example.com"
++    authentication = "anonymous"
++    c2s_require_encryption = false
++
+

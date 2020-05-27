@@ -1,0 +1,57 @@
+#!/sbin/openrc-run
+# Copyright 2020 sakaki <sakaki@deciban.com>
+# Distributed under the terms of the GNU General Public License v2
+
+description="Jitsi Meet videoconferencing system, server set"
+
+depend() {
+	need net
+	want turnserver
+	want jitsi-videobridge
+	want jicofo
+	want nginx
+	want jitsi-certbot
+	want cron
+}
+
+
+start() {
+	ebegin "Starting ${SVCNAME}"
+	# dummy - all work to start happens via the deps
+	/usr/bin/sleep 5
+	eend 0
+}
+
+start_post() {
+	# we have a webserver running now, so update certs
+	# if necessary
+	/usr/sbin/run-certbot.sh
+	if [[ ! -e "/etc/jitsi/.configured" ]]; then
+		ewarn "Your Jitsi system has started, but has not been configured."
+		ewarn "It will almost certainly NOT work as you want it to."
+		ewarn ""
+		ewarn "To configure your system, simply issue:"
+		ewarn "  emerge --config net-im/jitsi-meet-master-config"
+		ewarn "followed by:"
+		ewarn "  rc-service jitsi-meet-server restart"
+		ewarn "to have the new config taken up."
+	else
+		source "/etc/jitsi/jitsi-meet-master-config"
+		einfo "Your Jitsi Meet server complex has started!"
+		einfo "Browse to:"
+		einfo "  https://${JVB_HOSTNAME}"
+		einfo "to start a new meeting!"
+	fi
+}
+
+stop() {
+	ebegin "Stopping ${SVCNAME} (including dependent services)"
+	# revdeps are stopped in the background to avoid hanging in a loop
+	local s
+	for s in prosody turnserver nginx jicofo jitsi-videobridge jitsi-certbot; do
+		/bin/bash -c "/sbin/rc-service --ifstarted ${s} stop" </dev/null &>/dev/null &
+	done
+	/usr/bin/sleep 5
+	eend 0
+}
+

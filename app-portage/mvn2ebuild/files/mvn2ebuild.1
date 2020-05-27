@@ -1,0 +1,93 @@
+.nh
+.TH MVN2EBUILD 1 "Version 1.0.0: May 2020"
+.SH NAME
+.PP
+mvn2ebuild \- create a starter ebuild for a Maven project
+
+.SH SYNOPSIS
+.PP
+\fB\fCmvn2ebuild\fR [\fIMVN\_OPTIONS\fP]
+
+.SH DESCRIPTION
+.PP
+\fB\fCmvn2ebuild\fR is a simple script that can be used to create a 'starter'
+ebuild from a (working) Maven Java project. It is invoked in place
+of \fB\fCmvn\fR, in the top level directory, passing any options that
+would normally be given to \fB\fCmvn\fR (\fB\fC\-DskipTests\fR etc.)
+
+.PP
+The resulting ebuild is emitted to stdout; any other messages are
+sent to stderr.
+
+.PP
+The (usually long) list of URLs of all the jars, poms,
+etc that are required to be present in the Maven
+cache, in order to build and run the project, will be explicitly
+captured in the \fIEMAVEN\_VENDOR\fP array in the resulting ebuild
+(transformed into the correct format for use
+by the \fB\fCjava\-mavan\-pkg\fR eclass, which it inherits).
+
+.PP
+This, in turn, allows for the construction (via the eclass) of
+an 'on\-the\-fly' Maven cache during the
+ebuild's \fB\fCsrc\_prepare()\fR phase, sufficient to allow the rest of
+the build to proceed without needing to hit the network at all
+(necessary, if it is to run properly inside the \fB\fCportage\fR(5) sandbox).
+
+.PP
+You will almost certainly need to provide further functionality to
+the resulting ebuild, before it is ready for deployment.
+
+.SH OPTIONS
+.PP
+\fB\fC[MVN\_OPTIONS]\fR
+   Pass any options to \fB\fCmvn2ebuild\fR that you normally would to your
+   (working) \fB\fCmvn\fR clean build invocation. By default (if nothing is passed)
+   the following 'equivalent' Maven invocation will be assumed:
+   \fB\fCmvn \-DskipTests \-Dassembly.skipAssembly=false clean package install \-f pom.xml\fR
+   Note that \fB\fCmvn2ebuild\fR also passes
+   \fB\fC\-Dos.detected.{name,os,classifier}\fR parameters, to ensure these
+   are set correctly.
+
+.SH ALGORITHM
+.PP
+The script works by invoking \fB\fCmvn\fR with a temporary cache that is
+initially empty, and then recording all files downloaded, using these
+to populate the \fIEMAVEN\_VENDOR\fP array in the ebuild.
+
+.PP
+If invoked inside a \fB\fCgit\fR(1) repository, \fB\fCmvn2ebuild\fR will
+automatically inherit the \fB\fCgit\-r3\fR eclass in the ebuild, and
+set \fIEGIT\_REPO\_URI\fP, \fIEGIT\_BRANCH\fP and \fIEGIT\_COMMIT\fP appropriately.
+
+.SH BUGS
+.PP
+This is a very simple script, so many edge cases exist that can fool
+it. For example, if you pass some build options, but omit \fB\fCclean\fR, then
+the resulting \fIEMAVEN\_VENDOR\fP may be incomplete. The parsing out of
+Maven coordinates from captured URLs is primitive and may not work
+in certain cases. No attempt to create e.g. appropriate \fB\fCsrc\_install()\fR
+functions for zipped assemblies (etc.) is attempted (you need to roll
+your own install in such a case, but that is not particularly difficult).
+
+.SH COPYRIGHT
+.PP
+Copyright © 2020 sakaki
+
+.PP
+License GPLv3+ (GNU GPL version 3 or later)
+http://gnu.org/licenses/gpl.html
+\[la]http://gnu.org/licenses/gpl.html\[ra]
+
+.PP
+This is free software, you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+.SH AUTHOR
+.PP
+sakaki — send bug reports or comments to sakaki@deciban.com
+\[la]mailto:sakaki@deciban.com\[ra]
+
+.SH SEE ALSO
+.PP
+\fB\fCebuild\fR(5), \fB\fCgit\fR(1), \fB\fCportage\fR(5)

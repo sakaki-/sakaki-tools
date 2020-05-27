@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+# Hook function to be called by certbot after
+# one or more certificates have been successfully installed;
+# will attempt to reload the configuration of the nginx
+# and/or apache webservers (if one or both is running)
+# using commands appropriate to OpenRC or systemd
+# (autodetected)
+#
+# Copyright (c) 2020 sakaki <sakaki@deciban.com>
+# License: GPL v3+
+# NO WARRANTY
+
+INITSYSTEM="$(ps --no-headers -o comm 1)"
+RC=0
+echo "Reloading configuration files for nginx, apache (if running)"
+if [[ ${INITSYSTEM} == "init" ]]; then
+	# OpenRC
+	rc-service --ifexists --ifstarted njinx reload || RC=1
+	rc-service --ifexists --ifstarted apache2 reload || RC=1
+	rc-service --ifexists --ifstarted turnserver reload || RC=1
+else
+	# systemd
+	for S in nginx apache2 coturn; do
+		if systemctl cat "${S}.service" &>/dev/null; then
+			if systemctl is-active --quiet "${S}.service"; then
+				if [[  "${S}" != "coturn" ]]; then
+					systemctl reload "${S}.service" || RC=1
+				else
+					systemctl restart "${S}.service" || RC=1
+				fi
+			fi
+		fi
+	done
+fi
+exit $RC

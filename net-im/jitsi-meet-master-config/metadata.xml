@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<maintainer type="person">
+		<email>sakaki@deciban.com</email>
+		<name>sakaki</name>
+	</maintainer>
+	<longdescription>
+		Default master config for use with Jitsi Meet.
+
+		Like the "env" file in docker-jitsi-meet, this package
+		manages a single block of reference information used to
+		drive the subsequent configuration of the various necessary
+		subcomponent services of a Jitsi Meet instance (videobridge,
+		jicofo, webserver etc.)
+
+		With the package installed, the configuration may be updated
+		interactively via:
+			emerge --config jitsi-meet-master-config
+
+		This invokes a question-and-answer session to create the file
+			/etc/jitsi/jitsi-meet-master-config
+		which is then processed by a set of subcomponent configuration
+		callbacks from the /etc/jitsi/config-updaters.d/ directory.
+	</longdescription>
+</pkgmetadata>
+
