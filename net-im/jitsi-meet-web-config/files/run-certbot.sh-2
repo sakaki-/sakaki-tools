@@ -92,17 +92,7 @@ fi
 			--email "${LE_EMAIL}" \
 			--no-eff-email
 		RC=$?
-		# if successful, splice in the new certs
-		if ((RC==0)); then
-			echo "Initial certificate generation successful!"
-			echo "Splicing in new credentials"
-			ln -sf "/etc/letsencrypt/live/${LE_HOSTNAME}/privkey.pem" \
-				"/etc/jitsi/meet/${LE_HOSTNAME}.key"
-			ln -sf "/etc/letsencrypt/live/${LE_HOSTNAME}/fullchain.pem" \
-				"/etc/jitsi/meet/${LE_HOSTNAME}.crt"
-			echo "Reloading webserver config, restarting turnserver"
-			/usr/sbin/reload-webservers.sh
-		fi
+		((RC==0)) && echo "Initial certificate generation successful!"
 	else
 		# renewal run, we can rely on existing parameters
 		echo "Attempting to renew existing cert/key pair with Let's Encrypt"
@@ -110,6 +100,16 @@ fi
 			--cert-name "${LE_HOSTNAME}" \
 			--deploy-hook /usr/sbin/reload-webservers.sh
 		RC=$?
+	fi
+	if ((RC==0)) && [[ ! -L "/etc/jitsi/meet/${LE_HOSTNAME}.key" || ! -L "/etc/jitsi/meet/${LE_HOSTNAME}.crt" ]]; then
+
+		echo "Splicing in credentials"
+		ln -sf "/etc/letsencrypt/live/${LE_HOSTNAME}/privkey.pem" \
+			"/etc/jitsi/meet/${LE_HOSTNAME}.key"
+		ln -sf "/etc/letsencrypt/live/${LE_HOSTNAME}/fullchain.pem" \
+			"/etc/jitsi/meet/${LE_HOSTNAME}.crt"
+		echo "Reloading webserver config, restarting turnserver"
+		/usr/sbin/reload-webservers.sh
 	fi
 } >>"/var/log/jitsi/certbot.log" 2>>"/var/log/jitsi/certbot.log"
 exit $RC
