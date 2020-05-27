@@ -33,12 +33,13 @@ RDEPEND="
 	~net-im/jicofo-1.0.567.${PV}
 	~net-im/jitsi-videobridge-2.1.197.${PV}[authbind(-)?]
 	~net-im/jitsi-meet-prosody-1.0.${JMVER}.${PV}
-	~net-im/jitsi-meet-turnserver-1.0.${JMVER}.${PV}[port-443-mux]
 	certbot? ( >=app-crypt/certbot-1.4.0 )
 	apache2? (
+		~net-im/jitsi-meet-turnserver-1.0.${JMVER}.${PV}[-port-443-mux]
 		>=www-servers/apache-2.4.41
 	)
 	nginx? (
+		~net-im/jitsi-meet-turnserver-1.0.${JMVER}.${PV}[port-443-mux]
 		>=www-servers/nginx-1.18.0[nginx_modules_stream_map,nginx_modules_stream_ssl_preread]
 	)
 "
@@ -81,4 +82,3 @@ pkg_postinst() {
 		ewarn
 	fi
 }
-
