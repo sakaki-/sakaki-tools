@@ -146,3 +146,9 @@ LE_EMAIL=""
 # debconf key(s): none
 LE_WEBROOT=""
 
+# If set to "y", indicates that the values herein
+# have been set as the result of a successful
+#   emerge --config jitsi-meet-master-config
+# run
+# debconf key(s): none
+JMMC_CONFIGURED="n"

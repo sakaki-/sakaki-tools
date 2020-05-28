@@ -33,11 +33,11 @@ S="${WORKDIR}"
 src_install() {
 	keepdir /etc/jitsi/config-updaters.d
 	insinto /etc/jitsi
-	newins "${FILESDIR}/${PN}-1" "${PN}"
+	newins "${FILESDIR}/${PN}-2" "${PN}"
 	fperms 750 "/etc/jitsi/${PN}"
 	# keep a copy around elsewhere too
 	insinto "/usr/share/${PN}"
-	newins "${FILESDIR}/${PN}-1" "${PN}"
+	newins "${FILESDIR}/${PN}-2" "${PN}"
 }
 
 pkg_postinst() {
@@ -110,6 +110,7 @@ _ip_is_private() {
 
 pkg_config() {
 	local r
+	local do_qa=true
 	rm -f "${EROOT%/}/etc/jitsi/.configured" # sentinel
 	if [[ -s "${EROOT%/}/etc/jitsi/${PN}" ]]; then
 		source "${EROOT%/}/etc/jitsi/${PN}"
@@ -117,6 +118,23 @@ pkg_config() {
 		ewarn "No current master configuration file found!"
 	fi
 	if [[ "${JMMC_BATCH_MODE}" =~ ^[Yy]$ ]]; then
+		do_qa=false
+	elif [[ "${JMMC_CONFIGURED}" =~ ^[Yy]$ ]]; then
+		einfo "A filled-out master configuration file already exists!"
+		einfo "Re-run component configuration using these values (y)"
+		einfo "or enter a new configuration first (n)?"
+		einfo
+		einfon "Re-use existing configuration for ${JVB_HOSTNAME}? (y/n) [n]: "
+		read r
+		[[ -z ${r} ]] && r="n"
+		if [[ "${r}" =~ ^[Yy]$ ]]; then
+			do_qa=false
+		else
+			einfo "  OK, will re-use existing ${JVB_HOSTNAME} config"
+		fi
+		einfo
+	fi
+	if ! ${do_qa}; then
 		ewarn "As requested, using values from ${EROOT%/}/etc/jitsi/${PN}"
 		ewarn "in batch mode, verbatim; no input will be requested"
 		ewarn "and no fixup of values will be performed"
@@ -440,6 +458,7 @@ pkg_config() {
 		einfo "  XMPP server (prosody) host: ${JVB_HOST}"
 		einfo "  XMPP server (prosody) port: ${JVB_PORT}"
 		einfo
+		JMMC_CONFIGURED="y"
 		einfon "Configuration complete: write it? (y/n) [y]: "
 		read r
 		[[ -z ${r} ]] && r="y"
@@ -475,7 +494,8 @@ pkg_config() {
 's/^LE_ENABLE_AUTO=.*"/LE_ENABLE_AUTO="'"${LE_ENABLE_AUTO}"'"/ ; '\
 's/^LE_HOSTNAME=.*"/LE_HOSTNAME="'"${LE_HOSTNAME}"'"/ ; '\
 's/^LE_EMAIL=.*"/LE_EMAIL="'"${LE_EMAIL}"'"/ ; '\
-'s#^LE_WEBROOT=.*"#LE_WEBROOT="'"${LE_WEBROOT}"'"# ' \
+'s#^LE_WEBROOT=.*"#LE_WEBROOT="'"${LE_WEBROOT}"'"# ; ' \
+'s#^JMMC_CONFIGURED=.*"#JMMC_CONFIGURED="'"${JMMC_CONFIGURED}"'"# ' \
 			< "${EROOT%/}/usr/share/${PN}/${PN}" >"${EROOT%/}/etc/jitsi/${PN}"
 		chmod 640 "${EROOT%/}/etc/jitsi/${PN}"
 		einfo "New configuration written to ${EROOT%/}/etc/jitsi/${PN}"
