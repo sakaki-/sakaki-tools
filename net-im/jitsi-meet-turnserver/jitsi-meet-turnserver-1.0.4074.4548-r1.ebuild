@@ -17,7 +17,7 @@ IUSE="+port-443-mux"
 DEPEND="
 	>=dev-libs/openssl-1.0.2u
 	>=net-im/coturn-4.5.1.1
-	=net-im/jitsi-meet-prosody-${PV}
+	~net-im/jitsi-meet-prosody-${PV}
 "
 RDEPEND="
 	${DEPEND}
