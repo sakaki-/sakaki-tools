@@ -40,29 +40,77 @@ if [[ "${JVB_PRIOR_HOSTNAME}" != "${JVB_HOSTNAME}" && ! -z "${JVB_PRIOR_HOSTNAME
 	rm -f "${EROOT%/}/etc/jitsi/certbot/certbot.conf"
 fi
 
+# additional cleanup for the webservers as an old
+# config linked in sites-enabled / vhosts.d can prevent startup
+local nextsite
+if [[ -d "${EROOT%/}/etc/nginx/sites-enabled" ]]; then
+	for nextsite in "${EROOT%/}/etc/nginx/sites-enabled"/*; do
+		if [[ "${nextsite}" != "${EROOT%/}/etc/nginx/sites-enabled/${JVB_HOSTNAME}.conf" ]]; then
+			if [[ -L "${nextsite}" ]]; then
+				ewarn "Also removing ${nextsite}"
+				rm -f "${nextsite}"
+			elif [[ -s "${nextsite}" && -d "${EROOT%/}/etc/nginx/sites-available" ]]; then
+				ewarn "Also migrating ${nextsite}"
+				ewarn "  to ../sites-available/"
+				mv -f "${nextsite}" "${EROOT%/}/etc/nginx/sites-available/"
+			fi
+		fi
+	fi
+fi
+if [[ -d "${EROOT%/}/etc/apache2/vhosts.d" ]]; then
+	for nextsite in "${EROOT%/}/etc/apache2/vhosts.d"/*; do
+		if [[ "${nextsite}" != "${EROOT%/}/etc/apache2/vhosts.d/${JVB_HOSTNAME}.conf" ]]; then
+			if [[ -L "${nextsite}" ]]; then
+				ewarn "Also removing ${nextsite}"
+				rm -f "${nextsite}"
+			elif [[ -s "${nextsite}" && -d "${EROOT%/}/etc/apache2/sites-available" ]]; then
+				ewarn "Also migrating ${nextsite}"
+				ewarn "  to ../sites-available/"
+				mv -f "${nextsite}" "${EROOT%/}/etc/apache2/sites-available/"
+			fi
+		fi
+	fi
+fi
+
 local olddefault
 for olddefault in "${EROOT%/}/etc/apache2/vhosts.d"/00_default_*vhost.conf; do
 	einfo "Migrating ${olddefault##*/} to ${EROOT%/}/etc/apache2/sites-available/"
 	mv -f "${olddefault}" "${EROOT%/}/etc/apache2/sites-available/"
 done
 
+local create_cert=true
 if ! [[ "${JM_SUPPLY_OWN_CRT}" =~ ^[Yy]$ ]]; then
-	# following logic from deb, we generate a self-signed certificate,
-	# filling most of the info fields with dummy values; unimportant
-	# as this will (should!) only be used for initial testing,
-	# migrating to Let's Encrypt (e.g.) certs if productionized
-	einfo "Writing new self-generated key to:"
-	einfo "  ${EROOT%/}${JM_WEB_CERT_KEY}"
-	einfo "and new matching certificate to:"
-	einfo "  ${EROOT%/}${JM_WEB_CERT_CRT}"
-	local HOST="$( (hostname -s 2>/dev/null; echo localhost) | head -n 1)"
-	local DOMAIN="$( (hostname -d 2>/dev/null; echo localdomain) | head -n 1)"
-	local SUBJ="/O=${DOMAIN}/OU=${HOST}/CN=${JVB_HOSTNAME}/emailAddress="
-	SUBJ+="emailAddress=webmaster@${HOST}.${DOMAIN}"
-	openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 \
-		-subj "${SUBJ}" \
-		-keyout "${JM_WEB_CERT_KEY}" \
-		-out "${JM_WEB_CERT_CRT}" &>/dev/null
+	if [[ -L "${EROOT%/}${JM_WEB_CERT_KEY}" && -L "${EROOT%/}${JM_WEB_CERT_KEY}" ]]; then
+		# if these links both resolve, it probably means
+		# we already have a Let's Encrypt certificate
+		# issued
+		if readlink -e "${EROOT%/}${JM_WEB_CERT_KEY}" &>/dev/null && \
+			readlink -e "${EROOT%/}${JM_WEB_CERT_KEY}" &>/dev/null; then
+			create_cert=false
+		else
+			rm -f "${EROOT%/}${JM_WEB_CERT_KEY}" "${EROOT%/}${JM_WEB_CERT_KEY}"
+		fi
+	fi
+	if ${create_cert}; then
+		# following logic from deb, we generate a self-signed certificate,
+		# filling most of the info fields with dummy values; unimportant
+		# as this will (should!) only be used for initial testing,
+		# migrating to Let's Encrypt (e.g.) certs if productionized
+		einfo "Writing new self-generated key to:"
+		einfo "  ${EROOT%/}${JM_WEB_CERT_KEY}"
+		einfo "and new matching certificate to:"
+		einfo "  ${EROOT%/}${JM_WEB_CERT_CRT}"
+		local HOST="$( (hostname -s 2>/dev/null; echo localhost) | head -n 1)"
+		local DOMAIN="$( (hostname -d 2>/dev/null; echo localdomain) | head -n 1)"
+		local SUBJ="/O=${DOMAIN}/OU=${HOST}/CN=${JVB_HOSTNAME}/emailAddress="
+		SUBJ+="emailAddress=webmaster@${HOST}.${DOMAIN}"
+		openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 \
+			-subj "${SUBJ}" \
+			-keyout "${JM_WEB_CERT_KEY}" \
+			-out "${JM_WEB_CERT_CRT}" &>/dev/null
+	else
+		ewarn "Not deleting existing key/crt symlinks!"
+	fi
 fi
 einfo "Writing new Jitsi Meet config to:"
 einfo "  ${EROOT%/}/etc/jitsi/meet/${JVB_HOSTNAME}-config.js"
