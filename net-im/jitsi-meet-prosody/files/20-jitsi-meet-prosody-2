@@ -17,6 +17,28 @@
 # License: GPL v3+
 # NO WARRANTY
 
+# below blocks should have happened in pkg_postinst(), but they are very
+# important, so reiterate here
+if ! grep -q '[^#]*Include "conf\.d/\*\.cfg\.lua"' "${EROOT%/}/etc/jabber/prosody.cfg.lua"; then
+	ewarn "Making prosody read from /etc/jabber/conf.d/*.conf"
+	echo -e "\nInclude \"conf.d/*.cfg.lua\"" >> \
+		"${EROOT%/}/etc/jabber/prosody.cfg.lua"
+fi
+if grep -q '"prosody.log"' "${EROOT%/}/etc/jabber/prosody.cfg.lua"; then
+	ewarn "Setting full path for log file"
+	ewarn "  to \"/var/log/jabber/prosody.log\""
+	sed -i 's#prosody.log#/var/log/jabber/prosody.log#g' \
+		"${EROOT%/}/etc/jabber/prosody.cfg.lua"
+fi
+if grep -q '"prosody.err"' "${EROOT%/}/etc/jabber/prosody.cfg.lua"; then
+	ewarn "Setting full path for error log file"
+	ewarn "  to \"/var/log/jabber/prosody.err\""
+	sed -i 's#prosody.err#/var/log/jabber/prosody.err#g' \
+		"${EROOT%/}/etc/jabber/prosody.cfg.lua"
+fi
+
+mkdir -p "${EROOT%/}/usr/local/share/ca-certificates"
+
 if [[ "${JVB_PRIOR_HOSTNAME}" != "${JVB_HOSTNAME}" && ! -z "${JVB_PRIOR_HOSTNAME}" ]]; then
 	ewarn "Removing prior setup for ${JVB_PRIOR_HOSTNAME}"
 	rm -f "${EROOT%/}/etc/jabber/conf.avail/${JVB_PRIOR_HOSTNAME}.cfg.lua"

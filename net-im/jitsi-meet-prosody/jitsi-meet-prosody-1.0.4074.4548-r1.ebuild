@@ -44,14 +44,12 @@ src_install() {
 	# provide a callback to respond to changes in
 	# the master config file
 	insinto /etc/jitsi/config-updaters.d
-	newins "${FILESDIR}/20-${PN}-1" "20-${PN}"
+	newins "${FILESDIR}/20-${PN}-2" "20-${PN}"
 
 	# ensure we have config directories in prosody
 	# to use
 	keepdir "/etc/jabber/conf.d"
 	keepdir "/etc/jabber/conf.avail"
-	# ditto for local certificates
-	keepdir "/usr/local/share/ca-certificates"
 }
 
 pkg_postinst() {
@@ -63,11 +61,6 @@ pkg_postinst() {
 		ewarn "available in ${EROOT%/}/usr/share/${PN}); or, run:"
 		ewarn "  emerge --config jitsi-meet-master-config"
 		ewarn "for a prompt-driven process"
-	fi
-	if ! grep -q '[^#]*Include "conf\.d/\*\.cfg\.lua"' "${EROOT%/}/etc/jabber/prosody.cfg.lua"; then
-		elog "Making prosody read from /etc/jabber/conf.d/*.conf"
-		echo -e "\nInclude \"conf.d/*.cfg.lua\"" >> \
-			"${EROOT%/}/etc/jabber/prosody.cfg.lua"
 	fi
 	if ! grep -q '[^#]*Include "conf\.d/\*\.cfg\.lua"' "${EROOT%/}/etc/jabber/prosody.cfg.lua"; then
 		elog "Making prosody read from /etc/jabber/conf.d/*.conf"
