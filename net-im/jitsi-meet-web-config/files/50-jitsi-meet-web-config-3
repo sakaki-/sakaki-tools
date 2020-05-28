@@ -55,7 +55,7 @@ if [[ -d "${EROOT%/}/etc/nginx/sites-enabled" ]]; then
 				mv -f "${nextsite}" "${EROOT%/}/etc/nginx/sites-available/"
 			fi
 		fi
-	fi
+	done
 fi
 if [[ -d "${EROOT%/}/etc/apache2/vhosts.d" ]]; then
 	for nextsite in "${EROOT%/}/etc/apache2/vhosts.d"/*; do
@@ -69,7 +69,7 @@ if [[ -d "${EROOT%/}/etc/apache2/vhosts.d" ]]; then
 				mv -f "${nextsite}" "${EROOT%/}/etc/apache2/sites-available/"
 			fi
 		fi
-	fi
+	done
 fi
 
 local olddefault
