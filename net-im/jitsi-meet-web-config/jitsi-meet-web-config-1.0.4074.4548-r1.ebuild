@@ -25,8 +25,23 @@ RDEPEND="
 	systemd? ( sys-apps/systemd )
 	>=app-crypt/certbot-1.4.0
 	|| (
-		>=www-servers/nginx-1.18.0[ssl]
-		>=www-servers/apache-2.4.41[ssl,apache2_modules_rewrite,apache2_modules_headers,apache2_modules_proxy,apache2_modules_proxy_http,apache2_modules_include,apache2_modules_access_compat]
+		>=www-servers/nginx-1.18.0[ssl,\
+nginx_modules_stream_map,\
+nginx_modules_stream_ssl_preread]
+		>=www-servers/apache-2.4.41[ssl,\
+apache2_modules_access_compat,\
+apache2_modules_alias,\
+apache2_modules_authz_core,\
+apache2_modules_authz_host,\
+apache2_modules_dir,\
+apache2_modules_headers,\
+apache2_modules_include,\
+apache2_modules_mime,\
+apache2_modules_proxy,\
+apache2_modules_proxy_http,\
+apache2_modules_rewrite,\
+apache2_modules_socache_shmcb,\
+apache2_modules_unixd]
 	)
 	>=sys-process/lsof-4.91
 "
@@ -103,4 +118,3 @@ pkg_postinst() {
 		ewarn "for a prompt-driven process"
 	fi
 }
-

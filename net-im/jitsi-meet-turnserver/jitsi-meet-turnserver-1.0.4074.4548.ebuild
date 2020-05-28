@@ -22,9 +22,11 @@ DEPEND="
 RDEPEND="
 	${DEPEND}
 	|| (
-		>=www-servers/nginx-1.18.0[ssl,nginx_modules_stream_map,nginx_modules_stream_ssl_preread]
+		>=www-servers/nginx-1.18.0[ssl,\
+nginx_modules_stream_map,\
+nginx_modules_stream_ssl_preread]
 		!port-443-mux? (
-			>=www-servers/apache-2.4.41[ssl,apache2_modules_rewrite,apache2_modules_headers,apache2_modules_proxy,apache2_modules_proxy_http,apache2_modules_include,apache2_modules_access_compat]
+			>=www-servers/apache-2.4.41[ssl]
 		)
 	)
 "
@@ -67,4 +69,3 @@ pkg_postinst() {
 		ewarn "for a prompt-driven process"
 	fi
 }
-
