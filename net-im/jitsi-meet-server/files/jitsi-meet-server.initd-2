@@ -40,7 +40,9 @@ start_post() {
 		einfo "Your Jitsi Meet server complex has started!"
 		einfo "Browse to:"
 		einfo "  https://${JVB_HOSTNAME}"
-		einfo "to start a new meeting!"
+		einfo "Credentials needed to start a new meeting:"
+		einfo "  Username: \"${JICOFO_CONVENE_USER}\""
+		einfo "  Password: \"${JICOFO_CONVENE_PASSWORD}\""
 	fi
 }
 

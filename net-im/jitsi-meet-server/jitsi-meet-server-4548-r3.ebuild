@@ -61,13 +61,13 @@ nginx_modules_stream_ssl_preread]
 
 src_install() {
 	cp "${FILESDIR}/${PN}.service-1" "${T}/${PN}.service"
-	cp "${FILESDIR}/${PN}.initd-1" "${T}/${PN}"
+	cp "${FILESDIR}/${PN}.initd-2" "${T}/${PN}"
 	if use apache2; then
 		sed -i 's/nginx/apache2/g' "${T}/${PN}"{,.service}
 	fi
 	doinitd "${T}/${PN}"
 	systemd_dounit "${T}/${PN}.service"
-	newsbin "${FILESDIR}/${PN}-postcheck.sh-1" "${PN}-postcheck.sh"
+	newsbin "${FILESDIR}/${PN}-postcheck.sh-2" "${PN}-postcheck.sh"
 }
 
 pkg_postinst() {
