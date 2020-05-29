@@ -33,11 +33,11 @@ S="${WORKDIR}"
 src_install() {
 	keepdir /etc/jitsi/config-updaters.d
 	insinto /etc/jitsi
-	newins "${FILESDIR}/${PN}-2" "${PN}"
+	newins "${FILESDIR}/${PN}-3" "${PN}"
 	fperms 750 "/etc/jitsi/${PN}"
 	# keep a copy around elsewhere too
 	insinto "/usr/share/${PN}"
-	newins "${FILESDIR}/${PN}-2" "${PN}"
+	newins "${FILESDIR}/${PN}-3" "${PN}"
 }
 
 pkg_postinst() {
@@ -121,16 +121,17 @@ pkg_config() {
 		do_qa=false
 	elif [[ "${JMMC_CONFIGURED}" =~ ^[Yy]$ ]]; then
 		einfo "A filled-out master configuration file already exists!"
-		einfo "Re-run component configuration using these values (y)"
-		einfo "or enter a new configuration first (n)?"
+		einfo "Re-run component configuration using values from"
+		einfo "this file (y), or start afresh (n)?"
 		einfo
 		einfon "Re-use existing configuration for ${JVB_HOSTNAME}? (y/n) [n]: "
 		read r
 		[[ -z ${r} ]] && r="n"
 		if [[ "${r}" =~ ^[Yy]$ ]]; then
+			einfo "  OK, will re-use existing ${JVB_HOSTNAME} config"
 			do_qa=false
 		else
-			einfo "  OK, will re-use existing ${JVB_HOSTNAME} config"
+			einfo "  OK, will start afresh"
 		fi
 		einfo
 	fi
