@@ -120,9 +120,10 @@ pkg_config() {
 	if [[ "${JMMC_BATCH_MODE}" =~ ^[Yy]$ ]]; then
 		do_qa=false
 	elif [[ "${JMMC_CONFIGURED}" =~ ^[Yy]$ ]]; then
-		einfo "A filled-out master configuration file already exists!"
-		einfo "Re-run component configuration using values from"
-		einfo "this file (y), or start afresh (n)?"
+		einfo "A filled-out master configuration file already exists, at"
+		einfo "\"${EROOT%/}/etc/jitsi/${PN}\"."
+		einfo "  Re-run component configuration using values from"
+		einfo "  this file (y), or start afresh (n)?"
 		einfo
 		einfon "Re-use existing configuration for ${JVB_HOSTNAME}? (y/n) [n]: "
 		read r
@@ -522,7 +523,7 @@ pkg_config() {
 	done
 	eshopts_pop
 	einfo
-	ewarn "======================================================================"
+	einfo "======================================================================"
 	ewarn "Your new configuration has been written, but you now need to"
 	if ((REBOOT_REQUIRED==1)); then
 		ewarn "restart your system, and once that completes"
@@ -541,16 +542,16 @@ pkg_config() {
 	ewarn "To start automatically each boot, issue:"
 	ewarn "  rc-update add jitsi-meet-server default # on OpenRC, or"
 	ewarn "  systemctl enable jitsi-meet-server      # on systemd"
-	ewarn "======================================================================"
-	ewarn "Don't forget the new meeting convener credentials! They are:"
-	ewarn "  Username: \"${JICOFO_CONVENE_USER}\""
-	ewarn "  Password: \"${JICOFO_CONVENE_PASSWORD}\""
-	ewarn "  (any dashes in the above password are hyphens, not spaces)"
-	ewarn "======================================================================"
-	ewarn "NB: you can run this configuration step again in the future, if"
-	ewarn "desired, by issuing:"
-	ewarn "  emerge --config net-im/jitsi-meet-master-config"
-	ewarn "======================================================================"
+	einfo "======================================================================"
+	einfo "Don't forget the new meeting convener credentials! They are:"
+	einfo "  Username: \"${JICOFO_CONVENE_USER}\""
+	einfo "  Password: \"${JICOFO_CONVENE_PASSWORD}\""
+	einfo "  (any dashes in the above password are hyphens, not spaces)"
+	einfo "======================================================================"
+	einfo "NB: you can run this configuration step again in the future, if"
+	einfo "desired, by issuing:"
+	einfo "  emerge --config net-im/jitsi-meet-master-config"
+	einfo "======================================================================"
 	touch "${EROOT%/}/etc/jitsi/.configured" # sentinel
 }
 
