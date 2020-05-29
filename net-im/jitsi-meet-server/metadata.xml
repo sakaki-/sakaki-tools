@@ -43,7 +43,6 @@
 		<flag name="authbind">Use authbind to access privileged ports without root</flag>
 		<flag name="apache2">Use apache2 as the webserver.</flag>
 		<flag name="nginx">Use nginx as the webserver (preferred).</flag>
-		<flag name="certbot">Install certbot client and webserver plugin.</flag>
 	</use>
 </pkgmetadata>
 

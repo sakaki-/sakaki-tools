@@ -12,7 +12,7 @@ SRC_URI=""
 LICENSE="GPL-3+"
 SLOT="2.0"
 KEYWORDS="~amd64 ~arm64"
-IUSE="apache2 authbind +nginx +certbot"
+IUSE="apache2 authbind +nginx"
 REQUIRED_USE="
 	^^ ( nginx apache2 )
 "
@@ -33,7 +33,7 @@ RDEPEND="
 	~net-im/jicofo-1.0.567.${PV}
 	~net-im/jitsi-videobridge-2.1.197.${PV}[authbind(-)?]
 	~net-im/jitsi-meet-prosody-1.0.${JMVER}.${PV}
-	certbot? ( >=app-crypt/certbot-1.4.0 )
+	>=app-crypt/certbot-1.4.0
 	apache2? (
 		~net-im/jitsi-meet-turnserver-1.0.${JMVER}.${PV}[-port-443-mux]
 		>=www-servers/apache-2.4.41[ssl,\
