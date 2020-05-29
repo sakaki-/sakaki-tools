@@ -495,7 +495,7 @@ pkg_config() {
 's/^LE_ENABLE_AUTO=.*"/LE_ENABLE_AUTO="'"${LE_ENABLE_AUTO}"'"/ ; '\
 's/^LE_HOSTNAME=.*"/LE_HOSTNAME="'"${LE_HOSTNAME}"'"/ ; '\
 's/^LE_EMAIL=.*"/LE_EMAIL="'"${LE_EMAIL}"'"/ ; '\
-'s#^LE_WEBROOT=.*"#LE_WEBROOT="'"${LE_WEBROOT}"'"# ; ' \
+'s#^LE_WEBROOT=.*"#LE_WEBROOT="'"${LE_WEBROOT}"'"# ; '\
 's#^JMMC_CONFIGURED=.*"#JMMC_CONFIGURED="'"${JMMC_CONFIGURED}"'"# ' \
 			< "${EROOT%/}/usr/share/${PN}/${PN}" >"${EROOT%/}/etc/jitsi/${PN}"
 		chmod 640 "${EROOT%/}/etc/jitsi/${PN}"
