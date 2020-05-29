@@ -18,7 +18,7 @@ if [[ ${INITSYSTEM} == "init" ]]; then
 	# OpenRC
 	rc-service --ifexists --ifstarted njinx reload || RC=1
 	rc-service --ifexists --ifstarted apache2 reload || RC=1
-	rc-service --ifexists --ifstarted turnserver reload || RC=1
+	rc-service --ifexists --ifstarted turnserver restart || RC=1
 else
 	# systemd
 	for S in nginx apache2 coturn; do
