@@ -77,7 +77,7 @@ src_install() {
 	dodoc doc/debian/jitsi-meet/README
 	# provide a callback for use when master config changes
 	insinto /etc/jitsi/config-updaters.d
-	newins "${FILESDIR}/50-${PN}-3" "50-${PN}"
+	newins "${FILESDIR}/50-${PN}-4" "50-${PN}"
 	# make sure we have directories to write into later
 	keepdir /etc/{apache2,nginx}/sites-available
 	keepdir /etc/nginx/sites-enabled

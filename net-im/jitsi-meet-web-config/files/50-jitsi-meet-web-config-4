@@ -91,6 +91,17 @@ if ! [[ "${JM_SUPPLY_OWN_CRT}" =~ ^[Yy]$ ]]; then
 			rm -f "${EROOT%/}${JM_WEB_CERT_KEY}" "${EROOT%/}${JM_WEB_CERT_KEY}"
 		fi
 	fi
+	if [[ ${LE_ENABLE_AUTO} =~ ^[Yy]$ ]] && \
+		[[ -e "${EROOT%/}/etc/letsencrypt/live/${LE_HOSTNAME}/privkey.pem" ]] && \
+		[[ -e "${EROOT%/}/etc/letsencrypt/live/${LE_HOSTNAME}/fullchain.pem" ]]; then
+		ln -sf "/etc/letsencrypt/live/${LE_HOSTNAME}/privkey.pem" \
+			"${EROOT%/}/etc/jitsi/meet/${LE_HOSTNAME}.key"
+		ln -sf "/etc/letsencrypt/live/${LE_HOSTNAME}/fullchain.pem" \
+			"${EROOT%/}/etc/jitsi/meet/${LE_HOSTNAME}.crt"
+		create_cert=false
+		ewarn "Found an existing Let's Encrypt key/crt pair: reusing"
+	fi
+
 	if ${create_cert}; then
 		# following logic from deb, we generate a self-signed certificate,
 		# filling most of the info fields with dummy values; unimportant
