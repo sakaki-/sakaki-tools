@@ -525,9 +525,6 @@ pkg_config() {
 	einfo
 	einfo "======================================================================"
 	ewarn "Your new configuration has been written, but you now need to"
-	if ((REBOOT_REQUIRED==1)); then
-		ewarn "restart your system, and once that completes"
-	fi
 	ewarn "(re)start the various servers (jitsi-videobridge, turnserver/"
 	ewarn "coturn, jicofo, prosody and nginx (or apache2), at minimum)"
 	ewarn "to have it take effect."
