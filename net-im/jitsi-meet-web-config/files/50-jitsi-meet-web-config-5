@@ -88,7 +88,7 @@ if ! [[ "${JM_SUPPLY_OWN_CRT}" =~ ^[Yy]$ ]]; then
 			readlink -e "${EROOT%/}${JM_WEB_CERT_KEY}" &>/dev/null; then
 			create_cert=false
 		else
-			rm -f "${EROOT%/}${JM_WEB_CERT_KEY}" "${EROOT%/}${JM_WEB_CERT_KEY}"
+			rm -f "${EROOT%/}${JM_WEB_CERT_KEY}" "${EROOT%/}${JM_WEB_CERT_CRT}"
 		fi
 	fi
 	if [[ ${LE_ENABLE_AUTO} =~ ^[Yy]$ ]] && \
