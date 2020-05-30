@@ -528,11 +528,7 @@ pkg_config() {
 	ewarn "(re)start the various servers (jitsi-videobridge, turnserver/"
 	ewarn "coturn, jicofo, prosody and nginx (or apache2), at minimum)"
 	ewarn "to have it take effect."
-	if ((REBOOT_REQUIRED==0)); then
-		ewarn "You can do this conveniently by issuing:"
-	else
-		ewarn "You can do this latter step conveniently by issuing:"
-	fi
+	ewarn "You can do this conveniently by issuing:"
 	ewarn "  rc-service jitsi-meet-server restart    # on OpenRC, or"
 	ewarn "  systemctl restart jitsi-meet-server     # on systemd"
 	ewarn
