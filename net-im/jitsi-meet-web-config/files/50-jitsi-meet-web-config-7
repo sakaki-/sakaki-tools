@@ -87,6 +87,7 @@ if ! [[ "${JM_SUPPLY_OWN_CRT}" =~ ^[Yy]$ ]]; then
 		if readlink -e "${EROOT%/}${JM_WEB_CERT_KEY}" &>/dev/null && \
 			readlink -e "${EROOT%/}${JM_WEB_CERT_KEY}" &>/dev/null; then
 			create_cert=false
+			ewarn "Not deleting existing key/crt symlinks!"
 		else
 			rm -f "${EROOT%/}${JM_WEB_CERT_KEY}"
 			rm -f "${EROOT%/}${JM_WEB_CERT_CRT}"
@@ -122,8 +123,6 @@ if ! [[ "${JM_SUPPLY_OWN_CRT}" =~ ^[Yy]$ ]]; then
 			-subj "${SUBJ}" \
 			-keyout "${JM_WEB_CERT_KEY}" \
 			-out "${JM_WEB_CERT_CRT}" &>/dev/null
-	else
-		ewarn "Not deleting existing key/crt symlinks!"
 	fi
 fi
 einfo "Writing new Jitsi Meet config to:"
