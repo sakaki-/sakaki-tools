@@ -25,7 +25,7 @@ start() {
 start_post() {
 	# we have a webserver running now, so update certs
 	# if necessary
-	/usr/sbin/run-certbot.sh
+	/bin/bash -c "/usr/sbin/run-certbot.sh" </dev/null &>/dev/null &
 	if [[ ! -e "/etc/jitsi/.configured" ]]; then
 		ewarn "Your Jitsi system has started, but has not been configured."
 		ewarn "It will almost certainly NOT work as you want it to."

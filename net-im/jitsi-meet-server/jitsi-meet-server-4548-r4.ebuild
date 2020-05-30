@@ -61,7 +61,7 @@ nginx_modules_stream_ssl_preread]
 
 src_install() {
 	cp "${FILESDIR}/${PN}.service-1" "${T}/${PN}.service"
-	cp "${FILESDIR}/${PN}.initd-2" "${T}/${PN}"
+	cp "${FILESDIR}/${PN}.initd-3" "${T}/${PN}"
 	if use apache2; then
 		sed -i 's/nginx/apache2/g' "${T}/${PN}"{,.service}
 	fi
