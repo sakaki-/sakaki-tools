@@ -114,7 +114,7 @@ fi
 			"/etc/jitsi/meet/${LE_HOSTNAME}.key"
 		ln -sf "/etc/letsencrypt/live/${LE_HOSTNAME}/fullchain.pem" \
 			"/etc/jitsi/meet/${LE_HOSTNAME}.crt"
-		echo "Reloading webserver config, restarting turnserver"
+		echo "Restarting webserver(s), turnserver"
 		/usr/sbin/reload-webservers.sh
 	fi
 } >>"/var/log/jitsi/certbot.log" 2>>"/var/log/jitsi/certbot.log"
