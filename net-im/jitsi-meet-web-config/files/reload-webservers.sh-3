@@ -2,10 +2,12 @@
 #
 # Hook function to be called by certbot after
 # one or more certificates have been successfully installed;
-# will attempt to reload the configuration of the nginx
+# will attempt to restart the configuration of the nginx
 # and/or apache webservers (if one or both is running)
 # using commands appropriate to OpenRC or systemd
 # (autodetected)
+# NB we restart, rather than reload, to ensure the 
+# new certificate is taken up
 #
 # Copyright (c) 2020 sakaki <sakaki@deciban.com>
 # License: GPL v3+
@@ -13,22 +15,20 @@
 
 INITSYSTEM="$(ps --no-headers -o comm 1)"
 RC=0
-echo "Reloading configuration files for nginx, apache (if running)"
 if [[ ${INITSYSTEM} == "init" ]]; then
 	# OpenRC
-	rc-service --ifexists --ifstarted njinx reload || RC=1
-	rc-service --ifexists --ifstarted apache2 reload || RC=1
-	rc-service --ifexists --ifstarted turnserver restart || RC=1
+	echo "Restart nginx, apache, turnserver (if running)"
+	for S in njinx apache2 turnserver; do
+		# run in background to prevent hangs
+		/bin/bash -c "/sbin/rc-service --ifexists --ifstarted ${S} restart" </dev/null &>/dev/null &
+	done
 else
 	# systemd
+	echo "Restart nginx, apache, coturn (if running)"
 	for S in nginx apache2 coturn; do
 		if systemctl cat "${S}.service" &>/dev/null; then
 			if systemctl is-active --quiet "${S}.service"; then
-				if [[  "${S}" != "coturn" ]]; then
-					systemctl reload "${S}.service" || RC=1
-				else
-					systemctl restart "${S}.service" || RC=1
-				fi
+				systemctl restart "${S}.service" || RC=1
 			fi
 		fi
 	done

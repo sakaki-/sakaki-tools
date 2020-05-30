@@ -47,10 +47,16 @@ fi
 	echo "Starting certbot run on $(/bin/date -R)"
 
 	if ! /usr/bin/lsof -i ':80' &>/dev/null; then
-		# treat this as a clean exit
+		# first time, we wait
+		/usr/bin/sleep 5
+	fi
+
+	if ! /usr/bin/lsof -i ':80' &>/dev/null; then
+		# second time, treat as a clean exit
 		echo "No server bound on port 80; quitting" >&2
 		exit 0
 	fi
+
 
 	if [[ ! -s "/etc/jitsi/certbot/certbot.conf" ]]; then
 		# treat this as a clean exit; services not required
