@@ -86,11 +86,11 @@ ${nginx_multiplexing} && turn_port=443
 einfo "Writing new turnserver config to:"
 einfo "  ${_TURN_CONFIG}"
 sed -e \
-'s/jitsi-meet.example.com/'"${JVB_HOSTNAME}"'/g ; '\
 's/__turnSecret__/'"${TURN_SECRET}"'/g ; '\
 's/__external_ip_address__/'"${JVB_EXTERNAL_IP}"'/g ; '\
 's#/etc/jitsi/meet/jitsi-meet.example.com.crt#'"${JM_WEB_CERT_KEY_ESC}"'#g ; '\
-'s#/etc/jitsi/meet/jitsi-meet.example.com.key#'"${JM_WEB_CERT_CRT_ESC}"'#g '\
+'s#/etc/jitsi/meet/jitsi-meet.example.com.key#'"${JM_WEB_CERT_CRT_ESC}"'#g ; '\
+'s/jitsi-meet.example.com/'"${JVB_HOSTNAME}"'/g '\
 	< "${_TURN_CONFIG_TEMPLATE}" \
 	> "${_TURN_CONFIG}"
 
