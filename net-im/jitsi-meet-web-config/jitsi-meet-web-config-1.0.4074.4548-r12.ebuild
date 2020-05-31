@@ -18,6 +18,7 @@ IUSE="systemd"
 
 DEPEND="
 	>=dev-libs/openssl-1.0.2u
+	~net-im/jitsi-meet-turnserver-${PV}
 "
 RDEPEND="
 	${DEPEND}
