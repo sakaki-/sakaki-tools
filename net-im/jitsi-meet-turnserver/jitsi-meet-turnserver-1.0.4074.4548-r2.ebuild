@@ -51,13 +51,16 @@ src_install() {
 	dodoc doc/debian/jitsi-meet-turn/README
 	# provide an updater callback, for use when master config changes
 	insinto /etc/jitsi/config-updaters.d
-	newins "${FILESDIR}/60-${PN}-1" "60-${PN}"
+	newins "${FILESDIR}/60-${PN}-2" "60-${PN}"
 	# make sure we have directories to write into later
 	# currently, only nginx can act as mux
 	keepdir /etc/nginx/sites-available
 	keepdir /etc/nginx/sites-enabled
 	keepdir /etc/nginx/modules-available
 	keepdir /etc/nginx/modules-enabled
+	# place to keep local copies of Let's Encrypt certificates
+	keepdir "/etc/turnserver/certs"
+	fowners -R turnserver:turnserver "/etc/turnserver/certs"
 }
 
 pkg_postinst() {

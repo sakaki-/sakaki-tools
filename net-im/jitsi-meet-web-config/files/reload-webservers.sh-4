@@ -8,13 +8,32 @@
 # (autodetected)
 # NB we restart, rather than reload, to ensure the 
 # new certificate is taken up
+# Passed, in $1, the hostname (FQDN) to be renewed; this
+# allows a private copy to be taken for the turnserver, which
+# is not run (even initially) as root and so cannot read the
+# Let's Encrypt certificates in their default location. The
+# private copy is stored in /etc/turnserver/certs/$1.{key,crt}
 #
 # Copyright (c) 2020 sakaki <sakaki@deciban.com>
 # License: GPL v3+
 # NO WARRANTY
 
 INITSYSTEM="$(ps --no-headers -o comm 1)"
+LE_HOSTNAME="${1}"
 RC=0
+echo "Making private copy of new key/crt pair for turnserver"
+# remove any old pairs, this is just a local working copy
+rm -f "/etc/turnserver/certs/"*.{key,crt}
+(
+	umask 077
+	cp "/etc/letsencrypt/live/${LE_HOSTNAME}/privkey.pem" \
+			"/etc/turnserver/certs/${LE_HOSTNAME}.key"
+	cp "/etc/letsencrypt/live/${LE_HOSTNAME}/fullchain.pem" \
+			"/etc/turnserver/certs/${LE_HOSTNAME}.crt"
+	chown turnserver:turnserver "/etc/turnserver/certs/"*.{key,crt}
+	chmod 400 "/etc/turnserver/certs/"*.{key,crt}
+)
+
 if [[ ${INITSYSTEM} == "init" ]]; then
 	# OpenRC
 	echo "Restart nginx, apache, turnserver (if running)"

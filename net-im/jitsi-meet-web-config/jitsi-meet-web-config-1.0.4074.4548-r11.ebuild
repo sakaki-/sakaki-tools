@@ -86,8 +86,8 @@ src_install() {
 	# ensure that certbot has somewhere for challenges to go
 	keepdir "/var/lib/${PN}/.well-known/acme-challenge"
 	# certbot autorenewal services / scripts
-	newsbin "${FILESDIR}/run-certbot.sh-4" "run-certbot.sh"
-	newsbin "${FILESDIR}/reload-webservers.sh-3" "reload-webservers.sh"
+	newsbin "${FILESDIR}/run-certbot.sh-5" "run-certbot.sh"
+	newsbin "${FILESDIR}/reload-webservers.sh-4" "reload-webservers.sh"
 	insinto /etc/logrotate.d
 	newins "${FILESDIR}/certbot.logrotate-1" "certbot"
 	systemd_newunit "${FILESDIR}/jitsi-certbot.service-1" "jitsi-certbot.service"

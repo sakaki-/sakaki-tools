@@ -104,7 +104,7 @@ fi
 		echo "Attempting to renew existing cert/key pair with Let's Encrypt"
 		/usr/bin/certbot renew \
 			--cert-name "${LE_HOSTNAME}" \
-			--deploy-hook /usr/sbin/reload-webservers.sh
+			--deploy-hook "/usr/sbin/reload-webservers.sh ${LE_HOSTNAME}"
 		RC=$?
 	fi
 	if ((RC==0)) && [[ ! -L "/etc/jitsi/meet/${LE_HOSTNAME}.key" || ! -L "/etc/jitsi/meet/${LE_HOSTNAME}.crt" ]]; then
@@ -115,7 +115,7 @@ fi
 		ln -sf "/etc/letsencrypt/live/${LE_HOSTNAME}/fullchain.pem" \
 			"/etc/jitsi/meet/${LE_HOSTNAME}.crt"
 		echo "Restarting webserver(s), turnserver"
-		/usr/sbin/reload-webservers.sh
+		/usr/sbin/reload-webservers.sh "${LE_HOSTNAME}"
 	fi
 } >>"/var/log/jitsi/certbot.log" 2>>"/var/log/jitsi/certbot.log"
 exit $RC
