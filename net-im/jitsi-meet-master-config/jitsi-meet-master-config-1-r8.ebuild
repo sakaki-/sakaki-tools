@@ -524,9 +524,18 @@ pkg_config() {
 	eshopts_pop
 	einfo
 	einfo "======================================================================"
+	einfo "NB: you can run this configuration step again in the future, if"
+	einfo "desired, by issuing:"
+	einfo "  emerge --config net-im/jitsi-meet-master-config"
+	einfo "----------------------------------------------------------------------"
 	einfo " You'll need at least the following ports open on your firewall"
 	einfo " (in addition to any existing ports, e.g., 22/tcp for ssh):"
 	einfo "   80/tcp, 443/tcp, 4445/tcp, 4446/udp, 10000/udp"
+	einfo "----------------------------------------------------------------------"
+	einfo "Don't forget the new meeting convener credentials! They are:"
+	einfo "  Username: \"${JICOFO_CONVENE_USER}\""
+	einfo "  Password: \"${JICOFO_CONVENE_PASSWORD}\""
+	einfo "  (any dashes in the above password are hyphens, not spaces)"
 	einfo "======================================================================"
 	einfo
 	einfo "======================================================================"
@@ -534,6 +543,7 @@ pkg_config() {
 	ewarn "(re)start the various servers (jitsi-videobridge, turnserver/"
 	ewarn "coturn, jicofo, prosody and nginx (or apache2), at minimum)"
 	ewarn "to have it take effect."
+	ewarn
 	ewarn "You can do this conveniently by issuing:"
 	ewarn "  rc-service jitsi-meet-server restart    # on OpenRC, or"
 	ewarn "  systemctl restart jitsi-meet-server     # on systemd"
@@ -541,15 +551,6 @@ pkg_config() {
 	ewarn "To start automatically each boot, issue:"
 	ewarn "  rc-update add jitsi-meet-server default # on OpenRC, or"
 	ewarn "  systemctl enable jitsi-meet-server      # on systemd"
-	einfo "======================================================================"
-	einfo "Don't forget the new meeting convener credentials! They are:"
-	einfo "  Username: \"${JICOFO_CONVENE_USER}\""
-	einfo "  Password: \"${JICOFO_CONVENE_PASSWORD}\""
-	einfo "  (any dashes in the above password are hyphens, not spaces)"
-	einfo "======================================================================"
-	einfo "NB: you can run this configuration step again in the future, if"
-	einfo "desired, by issuing:"
-	einfo "  emerge --config net-im/jitsi-meet-master-config"
 	einfo "======================================================================"
 	touch "${EROOT%/}/etc/jitsi/.configured" # sentinel
 }
