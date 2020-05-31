@@ -37,7 +37,7 @@ rm -f "/etc/turnserver/certs/"*.{key,crt}
 if [[ ${INITSYSTEM} == "init" ]]; then
 	# OpenRC
 	echo "Restart nginx, apache, turnserver (if running)"
-	for S in njinx apache2 turnserver; do
+	for S in nginx apache2 turnserver; do
 		# run in background to prevent hangs
 		/bin/bash -c "/sbin/rc-service --ifexists --ifstarted ${S} restart" </dev/null &>/dev/null &
 	done
