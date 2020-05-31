@@ -524,6 +524,12 @@ pkg_config() {
 	eshopts_pop
 	einfo
 	einfo "======================================================================"
+	einfo " You'll need at least the following ports open on your firewall"
+	einfo " (in addition to any existing ports, e.g., 22/tcp for ssh):"
+	einfo "   80/tcp, 443/tcp, 4445/tcp, 4446/udp, 10000/udp"
+	einfo "======================================================================"
+	einfo
+	einfo "======================================================================"
 	ewarn "Your new configuration has been written, but you now need to"
 	ewarn "(re)start the various servers (jitsi-videobridge, turnserver/"
 	ewarn "coturn, jicofo, prosody and nginx (or apache2), at minimum)"
