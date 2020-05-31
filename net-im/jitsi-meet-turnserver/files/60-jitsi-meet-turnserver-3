@@ -67,12 +67,12 @@ local JT_WEB_CERT_CRT="/etc/turnserver/certs/${JVB_HOSTNAME}.crt"
 # self-signed crt, if any, should already have been set up when
 # we are called
 einfo "Making turnserver-local copy of key/crt pair from:"
-einfo "  ${$EROOT%/}${JM_WEB_CERT_KEY} and"
-einfo "  ${$EROOT%/}${JM_WEB_CERT_CRT}"
-cp -L "${$EROOT%/}${JM_WEB_CERT_KEY}" \
-	"${$EROOT%/}/etc/turnserver/certs/${JVB_HOSTNAME}.key"
-cp -L "${$EROOT%/}${JM_WEB_CERT_CRT}" \
-	"${$EROOT%/}/etc/turnserver/certs/${JVB_HOSTNAME}.crt"
+einfo "  ${EROOT%/}${JM_WEB_CERT_KEY} and"
+einfo "  ${EROOT%/}${JM_WEB_CERT_CRT}"
+cp -L "${EROOT%/}${JM_WEB_CERT_KEY}" \
+	"${EROOT%/}/etc/turnserver/certs/${JVB_HOSTNAME}.key"
+cp -L "${EROOT%/}${JM_WEB_CERT_CRT}" \
+	"${EROOT%/}/etc/turnserver/certs/${JVB_HOSTNAME}.crt"
 
 local JM_WEB_CERT_KEY_ESC="${JT_WEB_CERT_KEY//\//\\/}"
 local JM_WEB_CERT_CRT_ESC="${JT_WEB_CERT_CRT//\//\\/}"

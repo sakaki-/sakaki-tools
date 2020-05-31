@@ -51,7 +51,7 @@ src_install() {
 	dodoc doc/debian/jitsi-meet-turn/README
 	# provide an updater callback, for use when master config changes
 	insinto /etc/jitsi/config-updaters.d
-	newins "${FILESDIR}/60-${PN}-2" "60-${PN}"
+	newins "${FILESDIR}/60-${PN}-3" "60-${PN}"
 	# make sure we have directories to write into later
 	# currently, only nginx can act as mux
 	keepdir /etc/nginx/sites-available
