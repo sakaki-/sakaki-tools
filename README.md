@@ -26,6 +26,36 @@ Required for the tutorial ["**Sakaki's EFI Install Guide**"](https://wiki.gentoo
   * Provides `me_cleaner-1.2`; a tool for disabling the Intel Management Engine, by modifying its firmware.
 * **media-gfx/fotoxx** [upstream](https://www.kornelix.net/fotoxx/fotoxx.html)
   * Provides `fotoxx-18.01.3`, a program for improving digital photographs (supports HDR etc.).
+* **(eclass/)java-maven-pkg.eclass**
+  * Provides an eclass to support building Maven pacakges from source. Use `mvn2ebuild` in place of `mvn` within a working Maven build tree, to create a 'starter' ebuild using this eclass.
+* **app-portage/mvn2ebuild**
+  * Provides a simple utility to create a starter ebuild for a working Maven Java build, leveraging the `java-maven-pkg` eclass.
+* **dev-java/jitsi-sctp** [upstream](https://github.com/mstyura/jitsi-sctp)
+  * Provides a from-source build of the JNI component for the usrsctp library (currently for `~arm64` and `~amd64`). Uses `java-maven-pkg` eclass.
+* **acct-group/jitsi**
+  * Provides a runtime group used by Jitsi services. Currently set at 377.
+* **acct-user/jicofo**
+  * Provides a runtime uid for the JItsi COnference FOcus server. Currently set at 377.
+* **acct-user/jvb**
+  * Provides a runtime uid for the Jitsi Videobridge SFU. Currently set at 376.
+* **net-im/jicofo** [upstream](https://github.com/jitsi/jicofo)
+  * Provides a from-source build of the JItsi Meet COnference FOcus server (media session manager). Uses `java-maven-pkg` eclass.
+* **net-im/jitsi-meet-master-config**
+  * Provides master configuration settings for Jitsi Meet server, via a prompt-based tool.
+* **net-im/jitsi-meet-prosody** [upstream](https://github.com/jitsi/jitsi-meet)
+  * Provides Prosody configuration and plugins for use with Jitsi Meet.
+* **net-im/jitsi-meet-server**
+  * Provides a top-level service for the Jitsi Meet baseline server set, allowing all subcomponents to be started and stopped together. Emerge this package to build the Jitsi complex, then run `emerge --config jitsi-meet-master-config`, and then start the `jitsi-meet-server` service. Supports both OpenRC and systemd.
+* **net-im/jitsi-meet-turnserver** [upstream](https://github.com/jitsi/jitsi-meet)
+  * This package configures the `net-im/coturn` server to work with Jitsi Meet.
+* **net-im/jitsi-meet-web-config** [upstream](https://github.com/jitsi/jitsi-meet)
+  * Provides Webserver (nginx/apache) configurations for use with Jitsi Meet.
+* **net-im/jitsi-meet-web** [upstream](https://github.com/jitsi/jitsi-meet)
+  * Provides an (upstream deb-derived) WebRTC, JavaScript/WASM-based videoconferencing client webroot filestructure.
+* **net-im/jitsi-videobridge** [upstream](https://github.com/jitsi/jitsi-videobridge)
+  * Provides a from-source build of Jitsi VideoBridge - a WebRTC compatible SFU. Uses `java-maven-pkg` eclass.
+* **dev-python/xkcdpass** [upstream](https://github.com/redacted/XKCD-password-generator)
+  * Provides a tool to generate secure multiword passwords/passphrases, inspired by XKCD 936.
 
 ## Installation
 
