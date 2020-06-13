@@ -111,6 +111,8 @@ _ip_is_private() {
 pkg_config() {
 	local r
 	local do_qa=true
+	export LANG=C
+	export LC_ALL=C
 	rm -f "${EROOT%/}/etc/jitsi/.configured" # sentinel
 	if [[ -s "${EROOT%/}/etc/jitsi/${PN}" ]]; then
 		source "${EROOT%/}/etc/jitsi/${PN}"
