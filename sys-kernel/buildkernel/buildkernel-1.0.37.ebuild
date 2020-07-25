@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
@@ -27,7 +27,8 @@ RDEPEND="${DEPEND}
 	plymouth? ( >=sys-boot/plymouth-0.8.8-r4[gdm(+),libkms,pango] )
 	>=sys-kernel/genkernel-next-58[cryptsetup,gpg,plymouth?]
 	=app-crypt/staticgpg-1.4.16-r1
-	>=sys-boot/efibootmgr-0.5.4-r1"
+	>=sys-boot/efibootmgr-0.5.4-r1
+	>=sys-apps/debianutils-4.9.1[installkernel(+)]"
 
 # ebuild function overrides
 src_prepare() {
