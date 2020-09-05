@@ -1,0 +1,45 @@
+Title: Removal of sys-kernel/genkernel-next from Gentoo tree
+Author: sakaki <sakaki@deciban.com>
+Content-Type: text/plain
+Posted: 2020-09-06
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Installed: sys-kernel/buildkernel
+
+Per dilfridge@gentoo.org (2020-07-11), re sys-kernel/genkernel-next:
+
+"Fails to build with recent glibc, bug 719968
+ Removal in 30 days"
+
+And on 2020-08-20, the package was actually removed [1].
+
+To work around this in the short term (as it is a dependency of buildkernel)
+I have added v70 of genkernel-next to the sakaki-tools overlay, including
+iadegesso's busybox version patch. To use it, if you are applying a
+global mask for the sakaki-tools  overlay, you will need to do the
+following:
+
+  emaint sync --repo sakaki-tools
+  echo "~sys-kernel/genkernel-next-70" >> /etc/portage/package.unmask/genkernel-next
+
+Also, as this version uses sys-apps/busybox-1.32.0, which is currently
+keyworded ~amd64, if working on the stable branch you will need to issue:
+
+  echo "~sys-apps/busybox-1.32.0 ~amd64" >> /etc/portage/package.accept_keywords/busybox
+
+Once done, update these tools:
+
+  emerge -av1u sys-kernel/genkernel-next sys-apps/busybox
+
+after which you should be able to use buildekernel successfully again.
+
+NB: the instructions in this news item supercede those of the similar
+item posted on 2020-08-21.
+
+Further work will need to be done to adapt the buildkernel script to work
+with the baseline genkernel; this is just a short-term workaround. PRs
+welcome!
+
+sakaki <sakaki@deciban.com>
+
+[1] https://bugs.gentoo.org/719968#c66
