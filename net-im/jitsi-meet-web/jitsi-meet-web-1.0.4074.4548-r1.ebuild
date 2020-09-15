@@ -6,7 +6,7 @@ inherit unpacker
 
 JMVER="$(ver_cut 4)"
 DESCRIPTION="A WebRTC, JavaScript/WASM-based videoconferencing client"
-SRC_URI="https://download.jitsi.org/jitsi/debian/${PN}_$(ver_cut 1-3)-1_all.deb"
+SRC_URI="https://download.jitsi.org/stable/${PN}_$(ver_cut 1-3)-1_all.deb"
 HOMEPAGE="https://jitsi.org/meet"
 RESTRICT="mirror"
 
