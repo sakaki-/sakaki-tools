@@ -1,0 +1,41 @@
+Title: sakaki-tools going EOL
+Author: sakaki <sakaki@deciban.com>
+Content-Type: text/plain
+Posted: 2020-10-31
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Keyword: arm64
+
+sakaki stepping down from sakaki-tools maintenance
+--------------------------------------------------
+
+Dear fellow Gentoo and RPi enthusiast,
+
+sadly, due to legal obligations arising from a recent change in my
+'real world' job, I must announce I am standing down as maintainer
+of this project with immediate effect.
+
+For the meantime, I will leave the sakaki-tools repo up (for
+historical interest, and since the ebuilds in it may be of use
+still in certain applications); however, I do not plan to further
+update it going forward, nor will I be accepting / actioning
+pull requests or bug reports from this point.
+
+Email requests for support will also have to be politely declined,
+so, please treat this as an effective EOL notice.
+
+For further details, please see my longer post:
+
+https://www.raspberrypi.org/forums/viewtopic.php?p=1750206#p1750206
+
+Gentoo _itself_ on the aarch64 / 64-bit RPi platform remains
+very much a going concern of course; please see e.g.
+the following forum for more details:
+
+https://forums.gentoo.org/viewforum-f-62.html
+
+Many thanks for your interest in this project!
+
+With sincere apologies,
+
+sakaki ><
