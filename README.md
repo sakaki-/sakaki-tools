@@ -2,6 +2,8 @@
 
 Overlay containing various utility ebuilds for Gentoo on EFI.
 
+> 31 Oct 2020: sadly, due to legal obligations arising from a recent change in my 'real world' job, I must announce I am **standing down as maintainer of this project with immediate effect**. For the meantime, I will leave the repo up (for historical interest, and since the ebuilds etc. may be of use to others); however, I plan no further updates, nor will I be accepting / actioning further pull requests or bug reports from this point. Email requests for support will also have to be politely declined, so, **please treat this as an effective EOL notice**.<br><br>For further details, please see my post [here](https://forums.gentoo.org/viewtopic-p-8522963.html#8522963).<br><br>If you have used my [EFI Guide](https://wiki.gentoo.org/wiki/User:Sakaki/Sakaki%27s_EFI_Install_Guide) (and this repo) to install your PC-based Gentoo system, it *should* still continue to work for some time, **but** you should now take steps to migrate to a baseline [Gentoo Handbook](https://wiki.gentoo.org/wiki/Handbook:AMD64) install (since the underlying tools, such as [`buildkernel`](https://github.com/sakaki-/buildkernel), will also now no longer be supported and may eventually fail as more modern kernels etc. are released).<br><br>With sincere apologies, sakaki ><
+
 Required for the tutorial ["**Sakaki's EFI Install Guide**"](https://wiki.gentoo.org/wiki/Sakaki's_EFI_Install_Guide) on the Gentoo wiki.
 
 ## List of ebuilds
