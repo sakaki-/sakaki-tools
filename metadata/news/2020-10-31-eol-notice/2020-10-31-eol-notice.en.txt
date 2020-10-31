@@ -1,0 +1,60 @@
+Title: EFI Install Guide & sakaki-tools going EOL
+Author: sakaki <sakaki@deciban.com>
+Content-Type: text/plain
+Posted: 2020-10-31
+Revision: 1
+News-Item-Format: 2.0
+Display-If-Keyword: amd64
+
+sakaki stepping down from EFI Install Guide / sakaki-tools maintenance
+----------------------------------------------------------------------
+
+Dear fellow Gentoo enthusiasts -
+
+I am afraid I have some difficult news to share.
+
+Sadly, due to legal obligations arising from a recent change in my
+'real world' job, I must announce I am standing down as maintainer
+of Sakaki's EFI Install Guide [1] and the underlying sakaki-tools
+repo [2] with immediate effect.
+
+For more details to the background of this decision, please see [3].
+
+For the meantime, I will leave the EFI Install Guide and sakaki-tools
+repo up (for historical interest and since they may be of use to
+others); however, I plan no further updates, nor will I be accepting
+or actioning further pull requests / bug reports from this point.
+Email requests for support will also have to be politely declined ><.
+I will continue to monitor the various Gentoo forums, but will be
+unable to provide in-depth technical responses to queries, and any
+responses may be somewhat delayed.
+
+If you have used my EFI guide to install your Gentoo system, it
+*should* still continue to work for some time, *but* you should now
+take steps to migrate to a baseline Gentoo Handbook install (since
+the underlying tools, such as buildkernel [4], will also now no longer
+be supported and may eventually fail as more modern kernels etc.
+are released).
+
+My sincere and heartfelt apologies to those who have contributed to,
+used and installed systems based on this guide over the more than
+six years since I first released it (seems such a long time ago now!).
+
+And my heartfelt thanks to the fantastic team of devs and enthusiasts
+who make up the Gentoo and community (a particular shout out to
+NeddySeagoon!). It's been an honour to be a part of those endeavours
+for a little while, and I hope the guide, overlay and tools have
+helped, in some small way, to make the process of bringing up a
+Gentoo system more straightforward for beginners.
+
+So, kind regards, stay well, and I trust our paths may cross again
+in the future ^-^
+
+Sayounara!
+
+sakaki
+
+[1] https://wiki.gentoo.org/wiki/User:Sakaki/Sakaki%27s_EFI_Install_Guide
+[2] https://github.com/sakaki-/sakaki-tools
+[3] https://forums.gentoo.org/viewtopic-p-8521703.html#8521703
+[4] https://github.com/sakaki-/buildkernel
