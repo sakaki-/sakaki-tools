@@ -60,6 +60,16 @@ Required for the tutorial ["**Sakaki's EFI Install Guide**"](https://wiki.gentoo
   * Provides a tool to generate secure multiword passwords/passphrases, inspired by XKCD 936.
 
 ## Installation
+Newest **emerge app-eselect/eselect-repository** **( https://wiki.gentoo.org/wiki/Eselect/Repository)** 
+
+via manual add : **eselect repository add sakaki-tools git https://github.com/sakaki-/sakaki-tools.git**
+
+*(if not thier in yours else skip)* mkdir -p /etc/portage/package.accept_keywords
+
+echo "*/*::sakaki-tools ~amd64" >> /etc/portage/package.accept_keywords/sakaki-tools-repo
+
+Then run: emaint sync --repo sakaki-tools  
+    '(/var/db/repos/sakaki-tools )'  emerge --sync  now affects repo..
 
 As of version >= 2.2.16 of Portage, **sakaki-tools** is best installed (on Gentoo) via the [new plug-in sync system](https://wiki.gentoo.org/wiki/Project:Portage/Sync).
 Full instructions are provided on the [Gentoo wiki](https://wiki.gentoo.org/wiki/Sakaki's_EFI_Install_Guide/Building_the_Gentoo_Base_System_Minus_Kernel#Preparing_to_Run_Parallel_emerges).
