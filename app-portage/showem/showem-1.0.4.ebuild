@@ -25,7 +25,7 @@ RDEPEND="${DEPEND}
 
 # ebuild function overrides
 src_prepare() {
-	epatch_user
+	eapply_user
 }
 src_install() {
 	dobin "${PN}"
