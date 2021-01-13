@@ -2,15 +2,13 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 <maintainer status="active">
-		<email>sakaki@deciban.com</email>
-		<name>sakaki</name>
+		<name>GenPi64</name>
 </maintainer>
 <upstream>
-		<maintainer status="active">
+		<maintainer status="inactive">
 				<email>sakaki@deciban.com</email>
 				<name>sakaki</name>
 		</maintainer>
-		<bugs-to>mailto:sakaki@deciban.com</bugs-to>
 </upstream>
 <longdescription>
 		This is a very simple utility script, which allows you to monitor the
